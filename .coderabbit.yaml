@@ -20,6 +20,11 @@ reviews:
     drafts: false
     base_branches:
       - main
+  path_filters:
+    - "!app/package-lock.json"
+    - "!**/dist/**"
+    - "!**/*.min.js"
+    - "!**/*.min.css"
   path_instructions:
     - path: "app/src/components/**"
       instructions: |
@@ -77,12 +82,6 @@ reviews:
 
 chat:
   auto_reply: true
-
-path_filters:
-  - "!app/package-lock.json"
-  - "!**/dist/**"
-  - "!**/*.min.js"
-  - "!**/*.min.css"
 
 knowledge_base:
   learnings:
