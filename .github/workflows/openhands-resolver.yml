@@ -35,7 +35,7 @@ permissions:
 
 jobs:
   morpheus:
-    uses: All-Hands-AI/OpenHands/.github/workflows/openhands-resolver.yml@main
+    uses: All-Hands-AI/OpenHands/.github/workflows/openhands-resolver.yml@15716df79ff07f277d6b2fc8ca6dd7c615e238c8
     with:
       macro: "@openhands-agent"
       max_iterations: 50
