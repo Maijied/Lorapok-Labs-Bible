@@ -1,0 +1,55 @@
+# Pre-build environment for the GitHub Copilot Coding Agent.
+#
+# GitHub Copilot's cloud agent looks for a workflow that contains a job named
+# exactly `copilot-setup-steps` and runs its steps before the agent's firewall
+# is engaged. This is the right place to install dependencies and warm caches
+# so the agent can lint and build without hitting blocked network requests.
+#
+# Docs: https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment
+
+name: Copilot Setup Steps
+
+on:
+  # Allow the agent (and humans) to trigger this manually.
+  workflow_dispatch:
+
+  # Validate the workflow when it changes so we catch syntax errors early.
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+  pull_request:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+  # The job name MUST be `copilot-setup-steps`. Do not rename it.
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+
+    # Permissions for the setup job. Read-only is sufficient; the agent itself
+    # gets a separate, broader token at task time.
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: app
+
+      - name: Verify lint
+        run: npm run lint
+        working-directory: app
+
+      - name: Verify build
+        run: npm run build
+        working-directory: app
