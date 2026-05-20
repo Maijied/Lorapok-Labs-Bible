@@ -1,0 +1,168 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  LORAPOK CHRYSALIS — Agent Manifest                                        ║
+# ║  "Where ideas metamorphose into shippable code."                           ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+#
+# Machine-readable manifest describing the Lorapok multi-agent ecosystem.
+# Future Lorapok tooling (CLI, GitHub App, Marketplace) reads this file
+# to auto-discover agent capabilities and orchestrate tasks.
+
+apiVersion: lorapok.dev/v1
+kind: AgentFleet
+
+metadata:
+  name: Lorapok Agent Fleet
+  version: 1.0.0
+  description: >
+    A multi-AI agent ecosystem that ensures every line of code shipped from
+    Lorapok Labs is on-brand, reviewed, and battle-tested — embodying the
+    philosophy of "Products That Feel Alive."
+  tagline: "Where ideas metamorphose into shippable code."
+  author: Lorapok Labs
+  license: MIT
+  repository: https://github.com/Maijied/Lorapok-Labs-Bible
+  homepage: https://lorapok.github.io/
+  mascot: CyberLarva — cybernetic Black Soldier Fly Larva
+
+# ─── Brand Identity ───────────────────────────────────────────────────────────
+
+brand:
+  organization: Lorapok Labs
+  mission: "Building the Future. One Line at a Time."
+  themes:
+    - Zero-config efficiency
+    - Silent background optimization
+    - Playful neuroscience
+    - Digital metamorphosis
+  aesthetic:
+    style: Minimalist premium 3D, cyber-industrial, biological-tech fusion
+    palette:
+      background: "#0a0a0a"
+      primary: "#00ff88"
+      secondary: "#00e5ff"
+      accent: "#1a237e"
+      surface: "rgba(255,255,255,0.04)"
+    atmosphere:
+      - Low-key cinematic lighting
+      - Volumetric neon glow
+      - Soft bloom effects
+      - 3D depth of field
+      - Crisp rim lighting on metallic surfaces
+
+# ─── Agent Fleet ──────────────────────────────────────────────────────────────
+
+agents:
+  - id: lorapok-chrysalis
+    name: Lorapok Chrysalis
+    role: Brand-Compliant Builder
+    description: >
+      The primary coding agent. Receives tasks, follows playbooks, enforces
+      brand compliance via Brand Guard, and opens on-brand PRs.
+    platforms:
+      - github-copilot-coding-agent
+      - any-llm-with-github-access
+    config:
+      - .github/copilot-instructions.md
+      - .github/workflows/copilot-setup-steps.yml
+    documentation: .lorapok/agents/chrysalis.md
+
+  - id: lorapok-sentinel
+    name: Lorapok Sentinel
+    role: AI Code Reviewer
+    description: >
+      Watches every pull request. Provides contextual, brand-aware code reviews
+      with inline suggestions, security scanning, and design system compliance.
+    platforms:
+      - coderabbit
+    config:
+      - .coderabbit.yaml
+    documentation: .lorapok/agents/sentinel.md
+
+  - id: lorapok-morpheus
+    name: Lorapok Morpheus
+    role: Autonomous Issue Resolver
+    description: >
+      Monitors issues labeled 'fix-me'. Spins up a sandboxed environment,
+      analyzes the codebase, implements a fix, and opens a PR — fully autonomous.
+    platforms:
+      - openhands
+      - swe-agent
+    config:
+      - .github/workflows/openhands-resolver.yml
+    documentation: .lorapok/agents/morpheus.md
+
+# ─── Shared Capabilities ─────────────────────────────────────────────────────
+
+capabilities:
+  runtime:
+    node: "20"
+    packageManager: npm
+    workingDirectory: app/
+
+  validation:
+    - name: brand-guard
+      description: Zero-dep brand compliance — blocks off-brand patterns
+      command: node .lorapok/scripts/brand-guard.mjs
+    - name: lint
+      description: ESLint strict pass
+      command: npm run lint
+      cwd: app/
+    - name: build
+      description: TypeScript + Vite production build
+      command: npm run build
+      cwd: app/
+
+  playbooks:
+    directory: .lorapok/playbooks/
+    catalog:
+      - id: add-page
+        trigger: "task mentions adding a new page or route"
+        file: add-page.md
+      - id: add-product
+        trigger: "task mentions adding a product to the catalog"
+        file: add-product.md
+      - id: refactor-component
+        trigger: "task involves extracting, splitting, or refactoring a component"
+        file: refactor-component.md
+      - id: add-data-entry
+        trigger: "task involves adding achievements, skills, or social links"
+        file: add-data-entry.md
+
+  guardrails:
+    forbidden_patterns:
+      - pattern: "BrowserRouter"
+        reason: "HashRouter is required for GitHub Pages deep links"
+      - pattern: "tailwindcss"
+        reason: "Project uses CSS Modules + design tokens exclusively"
+      - pattern: "styled-components|@emotion|css-in-js"
+        reason: "CSS-in-JS libraries conflict with the Biological UI system"
+      - pattern: "express|fastify|koa|hono"
+        reason: "This is a zero-backend static site"
+    forbidden_files:
+      - "app/dist/**"
+      - "node_modules/**"
+
+# ─── Ecosystem Links ──────────────────────────────────────────────────────────
+
+ecosystem:
+  website: https://lorapok.github.io/
+  github_org: https://github.com/Lorapok
+  linkedin: https://www.linkedin.com/showcase/lorapok/
+  reddit: https://www.reddit.com/r/LorapokLabs/
+  instagram: https://www.instagram.com/lorapoklabs/
+  facebook: https://www.facebook.com/lorapoklabs
+  products:
+    - name: Lorapok Atlas API Directory
+      url: https://maijied.github.io/Lorapok-API_Atlas/
+    - name: Roast as a Service (RaaS)
+      url: https://maijied.github.io/roast-as-a-service/
+    - name: Lorapok Dynamic Ollama LLM Chat
+      url: https://maijied.github.io/Lorapok-Dynamic-Ollama-LLM-Chat-Interface/
+    - name: Lorapok AI Agent
+      url: https://github.com/Maijied/Lorapok_AI_Agent
+    - name: Laravel Execution Monitor
+      url: https://packagist.org/packages/lorapok/laravel-execution-monitor
+    - name: Lorapok TabMan
+      url: https://maijied.github.io/Lorapok-TabMan/
+    - name: Lorapok BrainSpark
+      url: https://lorapok.github.io/brainspark
