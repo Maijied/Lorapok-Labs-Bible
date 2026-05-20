@@ -2,149 +2,279 @@
 
 <br/>
 
-# ◈ Lorapok Sentinel
+```
+    ███████╗███████╗███╗   ██╗████████╗██╗███╗   ██╗███████╗██╗
+    ██╔════╝██╔════╝████╗  ██║╚══██╔══╝██║████╗  ██║██╔════╝██║
+    ███████╗█████╗  ██╔██╗ ██║   ██║   ██║██╔██╗ ██║█████╗  ██║
+    ╚════██║██╔══╝  ██║╚██╗██║   ██║   ██║██║╚██╗██║██╔══╝  ██║
+    ███████║███████╗██║ ╚████║   ██║   ██║██║ ╚████║███████╗███████╗
+    ╚══════╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝╚═╝  ╚═══╝╚══════╝╚══════╝
 
-**The AI Code Reviewer**
+              ◈  T H E   A I   C O D E   R E V I E W E R  ◈
+```
 
-[![Platform](https://img.shields.io/badge/Platform-CodeRabbit-00e5ff?style=flat-square)](https://github.com/marketplace/coderabbitai)
-[![Cost](https://img.shields.io/badge/Cost-Free%20for%20OSS-00ff88?style=flat-square)](https://www.coderabbit.ai/oss)
+# ◈ Sentinel
+
+**"Every line reviewed. Every PR guarded."**
+
+[![Platform](https://img.shields.io/badge/Platform-CodeRabbit-00e5ff?style=flat-square&logo=probot&logoColor=white)](https://github.com/marketplace/coderabbitai)
+[![Cost](https://img.shields.io/badge/Cost-Free%20for%20OSS-00ff88?style=flat-square)](https://docs.coderabbit.ai/pricing)
 [![Config](https://img.shields.io/badge/Config-.coderabbit.yaml-1a237e?style=flat-square)](../../.coderabbit.yaml)
-
-*"Every line reviewed. Every PR guarded."*
+[![License](https://img.shields.io/badge/License-MIT-38bdf8?style=flat-square)](../../LICENSE)
 
 </div>
 
 ---
 
+## CyberLarva — `sentinel` State
+
+```
+     ╭───────────────────────────────────╮
+     │   ◈ SENTINEL — Reviewing...       │
+     ╰───────────────────────────────────╯
+
+              ╭──────────╮
+             ╱  ⊙    ⊙   ╲         ← All-seeing review eyes (electric cyan)
+            │   ╰─◈──╯    │           (scanning every diff line)
+            │  ┌────────┐  │
+            │  │ ◇◇◇◇◇◇ │  │        ← Optical sensor array
+         ╭──┤  │ ◇◇◇◇◇◇ │  ├──╮     ← Dark-metallic armor plating
+        ╱╲  │  └────────┘  │  ╱╲
+       ╱  ╲ │  ┌──┐  ┌──┐  │ ╱  ╲   ← Dual-core analysis processors
+      ┊ ◈◈ ┊│  │▓▓│  │▓▓│  │┊ ◈◈ ┊
+      ┊ ◈◈ ┊╰──┴──┴──┴──┴──╯┊ ◈◈ ┊  ← Knowledge-base memory banks
+       ╲  ╱ ╭──────────────╮ ╲  ╱
+        ╲╱  │  ═══════════ │  ╲╱    ← Verdict output bus
+            │  ▶ APPROVED ◀ │
+            ╰──────────────╯
+         🔍 ╰┤ ╰┤ ╰┤ ╰┤ ╰┤ 🔍     ← Anchored (stationary review mode)
+
+     No PR escapes unreviewed.
+```
+
+---
+
 ## What is Sentinel?
 
+**Sentinel** is the AI Code Reviewer in the Lorapok Agent Fleet. Powered by [CodeRabbit](https://coderabbit.ai), it automatically reviews every pull request with path-specific intelligence — understanding that a change in `components/` requires different scrutiny than a change in `data/` or `styles/`.
 
-**Lorapok Sentinel** is the AI code reviewer in the Lorapok Agent Fleet. It watches every pull request opened against this repository — whether by humans, Chrysalis, or Morpheus — and provides contextual, brand-aware code reviews with inline suggestions.
+Sentinel enforces the Lorapok brand system at the review level:
+- 🎨 **Brand Compliance** — Are CSS tokens used correctly? Is the Biological UI aesthetic preserved?
+- 🏗️ **Architecture** — Does the code follow the established patterns? Are components properly scoped?
+- 🔒 **Security** — Are there exposed secrets, unsafe patterns, or XSS vulnerabilities?
+- ⚡ **Performance** — Are there unnecessary re-renders, missing memoization, or bundle bloat?
 
-Powered by [CodeRabbit](https://github.com/marketplace/coderabbitai) (free for open-source projects), Sentinel understands the Biological UI design system and enforces architectural decisions at review time.
+> **Cost: $0/month forever** — CodeRabbit's Open Source plan provides unlimited reviews for public repositories.
 
 ---
 
 ## How It Works
 
+```mermaid
+sequenceDiagram
+    participant Dev as Developer
+    participant GH as GitHub
+    participant Sent as ◈ Sentinel
+    participant KB as Knowledge Base
+
+    Dev->>GH: Opens Pull Request
+    GH->>Sent: Webhook trigger
+    Sent->>KB: Load .coderabbit.yaml + path rules
+    Sent->>Sent: Analyze diff (path-specific)
+    Sent->>GH: Post inline review comments
+    Sent->>GH: Post summary comment
+    Dev->>Sent: Reply / Ask question
+    Sent->>Dev: Contextual response
+    Dev->>GH: Push fixes
+    Sent->>GH: Re-review changed files
 ```
-┌──────────────────────────────────────────────────────────────┐
-│                                                              │
-│   1. PR OPENED (by human, Chrysalis, or Morpheus)            │
-│      └─▶ CodeRabbit webhook fires automatically              │
-│                                                              │
-│   2. LOAD CONTEXT                                            │
-│      └─▶ Reads .coderabbit.yaml configuration                │
-│      └─▶ Applies path-specific review instructions           │
-│      └─▶ Loads knowledge base (learnings from past reviews)  │
-│                                                              │
-│   3. REVIEW                                                  │
-│      └─▶ High-level summary of changes                       │
-│      └─▶ Sequence diagrams for complex flows                 │
-│      └─▶ Inline suggestions on each file                     │
-│      └─▶ Brand compliance checks (Biological UI)             │
-│      └─▶ Security analysis                                   │
-│                                                              │
-│   4. DELIVER                                                 │
-│      └─▶ Posts review comments directly on the PR            │
-│      └─▶ Requests changes if violations found                │
-│      └─▶ Auto-replies to follow-up questions                 │
-│                                                              │
-└──────────────────────────────────────────────────────────────┘
-```
+
+| Step | What Happens |
+|------|-------------|
+| **1. PR Opened** | Any push to a branch with an open PR triggers Sentinel |
+| **2. Context Loaded** | Reads `.coderabbit.yaml` for path rules, tone, and focus areas |
+| **3. Path-Specific Review** | Applies different review criteria based on file location |
+| **4. Inline Suggestions** | Posts code suggestions directly on the diff lines |
+| **5. Auto-Reply** | Responds to developer questions in review threads |
 
 ---
 
-## Configuration
+## Path-Specific Intelligence
 
-### File: `.coderabbit.yaml` (repo root)
+Sentinel applies different review lenses based on where the changes are:
 
-Sentinel's brain — defines review behavior, path-specific instructions, and knowledge base.
+| Path Pattern | Review Focus | Key Checks |
+|-------------|-------------|------------|
+| `app/src/components/**` | Component quality | Props typing, CSS module usage, accessibility, re-render risk |
+| `app/src/pages/**` | Page architecture | Route registration, layout integration, SEO metadata |
+| `app/src/data/**` | Data integrity | Type safety, interface compliance, no stale references |
+| `app/src/styles/**` | Brand compliance | Token usage, no hardcoded colors, animation performance |
+| `.lorapok/**` | Fleet integrity | Script correctness, playbook format, manifest schema |
+| `package.json` | Dependency safety | No banned deps, version pinning, bundle size impact |
 
+### Example Configuration
 
-### Path-Specific Intelligence
+```yaml
+# .coderabbit.yaml
+reviews:
+  path_instructions:
+    - path: "app/src/components/**"
+      instructions: |
+        Review for:
+        - Proper CSS Module imports (*.module.css)
+        - No inline styles or hardcoded colors
+        - Props typed with interface (not React.FC)
+        - Framer Motion for animations
+        - Accessibility (aria labels, semantic HTML)
 
-Sentinel applies different review rules based on file location:
+    - path: "app/src/data/**"
+      instructions: |
+        Review for:
+        - TypeScript interfaces properly defined
+        - Data matches expected schema
+        - No 'any' types
+        - Proper exports
 
-| Path | Review Focus |
-|------|-------------|
-| `app/src/components/**` | Biological UI compliance, CSS Modules, accessibility |
-| `app/src/pages/**` | No hardcoded data, HashRouter, framer-motion animations |
-| `app/src/data/**` | Type compliance, valid Lucide icons, HTTPS URLs |
-| `app/src/styles/**` | Token integrity, dark-theme-first, no breaking changes |
-| `.lorapok/**` | YAML schema, playbook structure, Brand Guard rules |
-| `app/package.json` | No forbidden deps (backend, CSS-in-JS, Tailwind) |
-
-### Review Behavior
-
-| Setting | Value | Why |
-|---------|-------|-----|
-| Profile | `assertive` | Catches more issues, fitting for brand compliance |
-| Request changes | `enabled` | Blocks non-compliant PRs from merging |
-| Sequence diagrams | `enabled` | Visualizes complex component interactions |
-| Auto-reply | `enabled` | Responds to developer questions in threads |
-| Draft PRs | `skipped` | Only reviews ready PRs |
+    - path: "app/src/styles/**"
+      instructions: |
+        Review for:
+        - Only CSS custom properties (var(--*))
+        - No hardcoded hex/rgb values
+        - Proper token naming (--color-*, --space-*, --radius-*)
+        - Animation performance (prefer transform/opacity)
+```
 
 ---
 
 ## Activation
 
+Getting Sentinel running takes under 60 seconds:
+
 ### Step 1: Install CodeRabbit
 
-1. Visit [github.com/marketplace/coderabbitai](https://github.com/marketplace/coderabbitai)
-2. Select **"Open Source"** plan (free forever for public repos)
-3. Grant access to `Maijied/Lorapok-Labs-Bible`
-4. Done — Sentinel activates on the next PR
+```
+     ╭───────────────────────────────────╮
+     │   ◈ SENTINEL — Installing...      │
+     ╰───────────────────────────────────╯
+```
 
-### Step 2: Verify
+1. Navigate to **[github.com/marketplace/coderabbitai](https://github.com/marketplace/coderabbitai)**
+2. Click **"Set up a plan"**
+3. Select **"Open Source"** — $0/month, unlimited repos
 
-Open any PR and look for CodeRabbit's review comment. It should reference the Biological UI guidelines and apply path-specific instructions.
+### Step 2: Grant Repository Access
+
+1. Choose **"Only select repositories"**
+2. Select your Lorapok repository
+3. Click **"Install & Authorize"**
+
+### Step 3: Add Configuration (Optional)
+
+Create `.coderabbit.yaml` in your repository root:
+
+```yaml
+language: en-US
+tone_instructions: >
+  You are reviewing code for Lorapok Labs. The project uses a Biological UI
+  design system with neon-on-dark glassmorphism. Enforce CSS Modules, typed
+  props, HashRouter, and zero-backend architecture. Be thorough but constructive.
+reviews:
+  auto_review:
+    enabled: true
+  path_instructions:
+    - path: "app/src/**"
+      instructions: "Enforce Lorapok brand system. No Tailwind, no CSS-in-JS, no BrowserRouter."
+chat:
+  auto_reply: true
+```
+
+### Step 4: Done
+
+Open any PR — Sentinel reviews it automatically within seconds.
 
 ---
 
 ## What Sentinel Reviews
 
+### 🎨 Brand Compliance
 
-### Brand Compliance
-- CSS Modules usage (no inline styles for static values)
-- Design token usage (no hardcoded colors)
-- HashRouter enforcement
-- No forbidden dependencies
+| Check | What It Looks For |
+|-------|-------------------|
+| CSS Token Usage | `var(--color-neon)` instead of `#00ff88` |
+| Component Patterns | Arrow functions, not `React.FC` |
+| Routing | `HashRouter` only, no `BrowserRouter` |
+| Styling | CSS Modules (`.module.css`), no Tailwind/CSS-in-JS |
+| File Naming | PascalCase components, camelCase utilities |
 
-### Code Quality
-- TypeScript strictness (no `any`)
-- Component structure (no React.FC, proper prop types)
-- Data layer usage (no hardcoded arrays in pages)
-- Import organization
+### 🏗️ Code Quality
 
-### Security
-- Dependency vulnerability scanning
-- Secret detection
-- Safe URL patterns
+| Check | What It Looks For |
+|-------|-------------------|
+| Type Safety | No `any`, proper generics, strict interfaces |
+| Import Order | External → Internal → Relative → Styles |
+| Component Size | Flags components over 200 lines |
+| Prop Drilling | Suggests composition or context patterns |
+| Dead Code | Unused imports, unreachable branches |
 
-### Architecture
-- Proper file placement (ui/ vs layout/ vs pages/)
-- Route registration completeness
-- Navigation entry consistency
+### 🔒 Security
+
+| Check | What It Looks For |
+|-------|-------------------|
+| Exposed Secrets | API keys, tokens in code |
+| XSS Vectors | Unsafe `dangerouslySetInnerHTML` usage |
+| Dependency Risk | Known vulnerabilities in new packages |
+| Data Validation | Unvalidated external inputs |
+
+### ⚡ Architecture
+
+| Check | What It Looks For |
+|-------|-------------------|
+| Separation of Concerns | Data in `data/`, UI in `components/` |
+| Route Structure | Pages export default, register in router |
+| State Management | No prop drilling beyond 2 levels |
+| Bundle Impact | Large imports, missing code splitting |
 
 ---
 
 ## Interacting with Sentinel
 
+Sentinel is conversational. You can interact directly in PR comments:
+
 ### Accept a Suggestion
-Just click "Commit suggestion" on any inline comment.
+
+Click the **"Commit suggestion"** button on any inline suggestion to apply it directly.
 
 ### Ask a Question
-Reply to any Sentinel comment — it auto-replies with context.
 
-### Override a Review
-If Sentinel flags something incorrectly, reply explaining why. It learns from the interaction for future reviews.
+```markdown
+@coderabbitai Why did you flag this import?
+```
 
-### Ignore Specific Files
-The `.coderabbit.yaml` already excludes:
-- `app/package-lock.json`
-- `app/dist/**`
-- `**/*.min.js` / `**/*.min.css`
+Sentinel will reply with context-aware explanation.
+
+### Override a Suggestion
+
+```markdown
+@coderabbitai This is intentional because [reason].
+```
+
+Sentinel acknowledges and learns for future reviews.
+
+### Request Re-review
+
+```markdown
+@coderabbitai review
+```
+
+Triggers a fresh review of the entire PR.
+
+### Generate Summary
+
+```markdown
+@coderabbitai summary
+```
+
+Generates a high-level summary of all changes.
 
 ---
 
@@ -152,31 +282,132 @@ The `.coderabbit.yaml` already excludes:
 
 | Feature | Benefit for Lorapok |
 |---------|-------------------|
-| Free for OSS | No license cost for public repos |
-| Path-specific rules | Different standards for components vs data vs styles |
-| Knowledge base | Learns from past reviews, gets smarter over time |
-| Auto-reply | Developers can ask "why?" and get instant answers |
-| GitHub native | Shows up as regular PR review comments |
-| Sequence diagrams | Auto-generated for complex component changes |
+| **Free for OSS** | $0/month forever for public repos |
+| **Path-specific rules** | Different review logic per directory |
+| **Knowledge base** | Learns project conventions over time |
+| **Auto-reply** | Responds to developer questions in threads |
+| **Sequence diagrams** | Auto-generates flow diagrams for complex changes |
+| **Incremental review** | Only re-reviews changed lines on new pushes |
+| **Multi-language** | Reviews TypeScript, CSS, YAML, JSON, Markdown |
+| **PR summaries** | Generates walkthrough tables for every PR |
+| **No token cost** | Doesn't consume your API credits |
 
 ---
 
-## Sentinel + Fleet Integration
+## Fleet Integration
 
-```
-Morpheus opens PR ──▶ Sentinel reviews ──▶ CI runs Gates ──▶ Merge
-Chrysalis opens PR ──▶ Sentinel reviews ──▶ CI runs Gates ──▶ Merge
-Human opens PR ────▶ Sentinel reviews ──▶ CI runs Gates ──▶ Merge
+```mermaid
+graph TD
+    subgraph "Agent Fleet"
+        MORPH[◈ Morpheus<br/>Opens PR]
+        CHRYS[◈ Chrysalis<br/>Opens PR]
+    end
+
+    subgraph "Sentinel Domain"
+        SENT[◈ Sentinel<br/>Reviews PR]
+        SENT --> BRAND[Brand Check]
+        SENT --> QUALITY[Code Quality]
+        SENT --> SECURITY[Security Scan]
+        SENT --> ARCH[Architecture]
+    end
+
+    subgraph "Gates"
+        BG[Brand Guard]
+        LINT[ESLint]
+        BUILD[Build]
+    end
+
+    MORPH --> SENT
+    CHRYS --> SENT
+    SENT -->|Approved| BG
+    BG --> LINT --> BUILD --> DEPLOY[✓ Deploy]
+
+    style MORPH fill:#ff6b35,color:#fff
+    style CHRYS fill:#00ff88,color:#0a0a0a
+    style SENT fill:#00e5ff,color:#0a0a0a
+    style BRAND fill:#1a237e,color:#00ff88
+    style QUALITY fill:#1a237e,color:#00ff88
+    style SECURITY fill:#1a237e,color:#00e5ff
+    style ARCH fill:#1a237e,color:#00e5ff
 ```
 
-Every PR goes through Sentinel regardless of who opened it. This ensures consistent quality even when AI agents make mistakes.
+### Integration Flow
+
+1. **Morpheus** resolves an issue → Opens a PR
+2. **Chrysalis** implements a task → Opens a PR
+3. **Sentinel** automatically reviews the PR
+4. Developer addresses feedback or merges
+5. **Chrysalis Gates** run on merge → Deploy
+
+> Sentinel acts as the quality gatekeeper between agent-generated code and production.
 
 ---
+
+## Advanced Configuration
+
+### Custom Instructions per Path
+
+```yaml
+reviews:
+  path_instructions:
+    - path: "app/src/components/ui/**"
+      instructions: |
+        These are reusable UI primitives. Check:
+        - Proper forwardRef usage for DOM components
+        - CSS custom properties for all visual values
+        - Framer Motion variants for animations
+        - className prop support via cn() utility
+
+    - path: "app/src/components/layout/**"
+      instructions: |
+        Layout components define app structure. Check:
+        - Responsive breakpoints use CSS tokens
+        - No fixed widths (use min/max/clamp)
+        - Proper semantic HTML (nav, main, aside, footer)
+        - Keyboard navigation support
+
+    - path: ".github/workflows/**"
+      instructions: |
+        CI/CD configuration. Check:
+        - Node 20 specified
+        - Proper caching configuration
+        - Security: no secrets in logs
+        - Proper job dependencies
+```
+
+### Knowledge Base Integration
+
+Sentinel can reference a knowledge base to learn project-specific patterns:
+
+```yaml
+knowledge_base:
+  learnings:
+    - "This project uses HashRouter because it deploys to GitHub Pages"
+    - "CSS Modules are required. Never suggest Tailwind or styled-components"
+    - "Components use arrow functions with typed props, not React.FC"
+    - "The mascot is called CyberLarva and appears in CLI output"
+```
+
+---
+
+## Related
 
 <div align="center">
 
-**Part of the [Lorapok Agent Fleet](../README.md)**
+| | Agent | Role | Link |
+|---|--------|------|------|
+| ◈ | **Chrysalis** | Brand-Compliant Builder | [→ chrysalis.md](chrysalis.md) |
+| ◈ | **Sentinel** | AI Code Reviewer | *You are here* |
+| ◈ | **Morpheus** | Autonomous Issue Resolver | [→ morpheus.md](morpheus.md) |
 
-[◈ Chrysalis](chrysalis.md) · ◈ Sentinel · [◈ Morpheus](morpheus.md)
+---
+
+**◈ Lorapok Agent Fleet** · [Fleet Overview](../README.md) · [Playbooks](../playbooks/) · [Brand Guard](../scripts/brand-guard.mjs)
+
+<br/>
+
+*"Building the Future. One Line at a Time."*
+
+[![Lorapok Labs](https://img.shields.io/badge/Lorapok%20Labs-lorapok.github.io-00ff88?style=flat-square)](https://lorapok.github.io/)
 
 </div>
