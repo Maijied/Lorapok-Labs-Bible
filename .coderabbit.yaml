@@ -1,0 +1,119 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  LORAPOK SENTINEL — CodeRabbit Configuration                               ║
+# ║  "Every line reviewed. Every PR guarded."                                  ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+#
+# Sentinel is the AI code reviewer for the Lorapok Labs ecosystem.
+# It uses CodeRabbit (free for open source) to provide brand-aware,
+# contextual reviews on every pull request.
+#
+# Install CodeRabbit: https://github.com/marketplace/coderabbitai
+# Docs: https://docs.coderabbit.ai/
+
+language: en-US
+
+reviews:
+  # High-level review behavior
+  profile: assertive
+  request_changes_workflow: true
+  high_level_summary: true
+  poem: false
+  collapse_walkthrough: false
+  sequence_diagrams: true
+
+  # Auto-review settings
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - main
+
+  # Path-specific review instructions
+  path_instructions:
+    - path: "app/src/components/**"
+      instructions: |
+        Review for Biological UI compliance:
+        - Must use CSS Modules (colocated .module.css), never inline styles for static values.
+        - Must use design tokens from app/src/styles/tokens.css (no hardcoded colors).
+        - Interactive elements need hover/focus states with neon glow.
+        - Must be keyboard-navigable.
+        - Use cn() helper for class joining, not string templates.
+        - No React.FC — prefer explicit function signatures.
+        - Animations via framer-motion only.
+
+    - path: "app/src/pages/**"
+      instructions: |
+        Page review checklist:
+        - Must NOT hardcode data arrays — import from app/src/data/*.ts.
+        - Must use HashRouter paths (never BrowserRouter).
+        - Must include framer-motion entrance animation.
+        - Must use at least one GlassCard or glassmorphic container.
+        - Check that route is registered in App.tsx and navigation.ts.
+
+    - path: "app/src/data/**"
+      instructions: |
+        Data layer review:
+        - Entries must satisfy TypeScript interfaces in app/src/types/index.ts.
+        - Array order matters (render order).
+        - URLs must be HTTPS and publicly accessible.
+        - Icons must be valid Lucide React icon names (PascalCase).
+
+    - path: "app/src/styles/**"
+      instructions: |
+        Design token review:
+        - Maintain the Biological UI palette: pitch-black bg, neon-green primary, cyan secondary.
+        - No breaking changes to existing custom properties without updating all consumers.
+        - Ensure dark-theme-first approach.
+
+    - path: ".lorapok/**"
+      instructions: |
+        Agent ecosystem review:
+        - Validate YAML schema compliance for chrysalis.yml.
+        - Playbooks must follow the standard structure: Trigger → Checklist → Template → Brand Rules.
+        - Brand Guard rules must have id, pattern, message, severity, suggestion.
+
+    - path: "app/package.json"
+      instructions: |
+        Dependency review:
+        - No backend frameworks (express, fastify, koa, hono, next, nuxt).
+        - No CSS-in-JS libraries (styled-components, @emotion, etc.).
+        - No Tailwind CSS.
+        - Verify new deps are necessary and lightweight.
+
+  # Review instructions applied to all files
+  instructions: |
+    You are reviewing code for **Lorapok Labs Bible**, a brand-driven PWA.
+
+    KEY CONSTRAINTS:
+    1. HashRouter only — BrowserRouter breaks GitHub Pages deep links.
+    2. CSS Modules + design tokens — no Tailwind, no CSS-in-JS.
+    3. TypeScript strict — no `any` without explicit justification.
+    4. Zero-backend — this is a static site on GitHub Pages.
+    5. Data layer — content lives in app/src/data/*.ts, not in pages.
+
+    AESTHETIC: "Biological UI" — dark backgrounds, neon-green/cyan accents,
+    glassmorphic panels, volumetric glow, framer-motion animations.
+
+    When reviewing, reference the .lorapok/chrysalis.yml manifest and
+    .lorapok/playbooks/ for expected patterns.
+
+chat:
+  auto_reply: true
+
+# Files to ignore during review
+path_filters:
+  - "!app/package-lock.json"
+  - "!app/dist/**"
+  - "!**/*.min.js"
+  - "!**/*.min.css"
+
+# Knowledge base for enhanced context
+knowledge_base:
+  learnings:
+    scope: auto
+  issues:
+    scope: auto
+  jira:
+    project_keys: []
+  linear:
+    team_keys: []
