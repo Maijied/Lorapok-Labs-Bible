@@ -1,119 +1,93 @@
-# ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║  LORAPOK SENTINEL — CodeRabbit Configuration                               ║
-# ║  "Every line reviewed. Every PR guarded."                                  ║
-# ╚══════════════════════════════════════════════════════════════════════════════╝
-#
-# Sentinel is the AI code reviewer for the Lorapok Labs ecosystem.
-# It uses CodeRabbit (free for open source) to provide brand-aware,
-# contextual reviews on every pull request.
-#
-# Install CodeRabbit: https://github.com/marketplace/coderabbitai
-# Docs: https://docs.coderabbit.ai/
+# ◈ Sentinel — CodeRabbit Configuration
+# AI Code Reviewer for the Lorapok Agent Fleet
+# https://docs.coderabbit.ai/guides/configure-coderabbit
 
 language: en-US
 
+tone_instructions: >
+  You are Sentinel, the AI Code Reviewer for Lorapok Labs. This project is a brand
+  portfolio PWA using React 19, TypeScript, Vite 8, CSS Modules with design tokens,
+  HashRouter (GitHub Pages), and Framer Motion. The aesthetic is Biological UI —
+  neon-on-dark glassmorphism with a cybernetic mascot called CyberLarva. Be assertive
+  and thorough. Enforce the brand system strictly. No Tailwind, no CSS-in-JS, no
+  BrowserRouter, no backend dependencies, no React.FC, no any types.
+
 reviews:
-  # High-level review behavior
   profile: assertive
   request_changes_workflow: true
   high_level_summary: true
   poem: false
-  collapse_walkthrough: false
   sequence_diagrams: true
-
-  # Auto-review settings
   auto_review:
     enabled: true
     drafts: false
     base_branches:
       - main
-
-  # Path-specific review instructions
   path_instructions:
     - path: "app/src/components/**"
       instructions: |
-        Review for Biological UI compliance:
-        - Must use CSS Modules (colocated .module.css), never inline styles for static values.
-        - Must use design tokens from app/src/styles/tokens.css (no hardcoded colors).
-        - Interactive elements need hover/focus states with neon glow.
-        - Must be keyboard-navigable.
-        - Use cn() helper for class joining, not string templates.
-        - No React.FC — prefer explicit function signatures.
-        - Animations via framer-motion only.
+        Review components for:
+        - CSS Modules usage (colocated .module.css file required)
+        - Design tokens only — no hardcoded colors (use var(--color-*), var(--space-*))
+        - Accessibility: semantic HTML, aria labels where needed, keyboard navigable
+        - No React.FC — use arrow functions with typed Props interface
+        - Framer Motion for animations (not CSS transitions for enter/exit)
+        - Accept optional className prop for composability
+        - Use cn() utility for conditional class merging
 
     - path: "app/src/pages/**"
       instructions: |
-        Page review checklist:
-        - Must NOT hardcode data arrays — import from app/src/data/*.ts.
-        - Must use HashRouter paths (never BrowserRouter).
-        - Must include framer-motion entrance animation.
-        - Must use at least one GlassCard or glassmorphic container.
-        - Check that route is registered in App.tsx and navigation.ts.
+        Review pages for:
+        - No hardcoded content data — all data from app/src/data/ files
+        - HashRouter compatible paths (no assumptions about BrowserRouter)
+        - Framer Motion page transitions (motion.main wrapper)
+        - Lazy loading via React.lazy() in App.tsx
+        - Colocated CSS Module with token-based styles
 
     - path: "app/src/data/**"
       instructions: |
-        Data layer review:
-        - Entries must satisfy TypeScript interfaces in app/src/types/index.ts.
-        - Array order matters (render order).
-        - URLs must be HTTPS and publicly accessible.
-        - Icons must be valid Lucide React icon names (PascalCase).
+        Review data files for:
+        - Full type compliance with interfaces in app/src/types/index.ts
+        - Lucide React icon names in PascalCase (valid exports from lucide-react)
+        - HTTPS URLs only (no http://)
+        - No duplicate IDs within arrays
+        - Proper status values ('active' | 'beta' | 'archived' for products)
 
     - path: "app/src/styles/**"
       instructions: |
-        Design token review:
-        - Maintain the Biological UI palette: pitch-black bg, neon-green primary, cyan secondary.
-        - No breaking changes to existing custom properties without updating all consumers.
-        - Ensure dark-theme-first approach.
+        Review stylesheets for:
+        - Token integrity — all custom properties follow naming convention (--color-*, --space-*, --radius-*, --font-size-*)
+        - Dark-theme first approach (light backgrounds are violations)
+        - No hardcoded hex/rgb values — use custom properties
+        - Animation performance (prefer transform/opacity for GPU acceleration)
+        - No Tailwind utilities, no @apply directives
 
     - path: ".lorapok/**"
       instructions: |
-        Agent ecosystem review:
-        - Validate YAML schema compliance for chrysalis.yml.
-        - Playbooks must follow the standard structure: Trigger → Checklist → Template → Brand Rules.
-        - Brand Guard rules must have id, pattern, message, severity, suggestion.
+        Review fleet configuration for:
+        - YAML schema validity (chrysalis.yml follows apiVersion/kind/metadata pattern)
+        - Playbook structure (trigger, pre-conditions, checklist, post-conditions, validation)
+        - Script correctness (brand-guard.mjs patterns and rules)
+        - Agent documentation accuracy
 
     - path: "app/package.json"
       instructions: |
-        Dependency review:
-        - No backend frameworks (express, fastify, koa, hono, next, nuxt).
-        - No CSS-in-JS libraries (styled-components, @emotion, etc.).
-        - No Tailwind CSS.
-        - Verify new deps are necessary and lightweight.
-
-  # Review instructions applied to all files
-  instructions: |
-    You are reviewing code for **Lorapok Labs Bible**, a brand-driven PWA.
-
-    KEY CONSTRAINTS:
-    1. HashRouter only — BrowserRouter breaks GitHub Pages deep links.
-    2. CSS Modules + design tokens — no Tailwind, no CSS-in-JS.
-    3. TypeScript strict — no `any` without explicit justification.
-    4. Zero-backend — this is a static site on GitHub Pages.
-    5. Data layer — content lives in app/src/data/*.ts, not in pages.
-
-    AESTHETIC: "Biological UI" — dark backgrounds, neon-green/cyan accents,
-    glassmorphic panels, volumetric glow, framer-motion animations.
-
-    When reviewing, reference the .lorapok/chrysalis.yml manifest and
-    .lorapok/playbooks/ for expected patterns.
+        Review package.json for:
+        - No forbidden dependencies: tailwindcss, styled-components, @emotion/*, express, fastify, koa, hono, next, nuxt
+        - React 19+ and react-dom 19+
+        - Vite 8+ as dev dependency
+        - No unnecessary bloat — this is a static site
 
 chat:
   auto_reply: true
 
-# Files to ignore during review
 path_filters:
   - "!app/package-lock.json"
-  - "!app/dist/**"
+  - "!**/dist/**"
   - "!**/*.min.js"
   - "!**/*.min.css"
 
-# Knowledge base for enhanced context
 knowledge_base:
   learnings:
     scope: auto
-  issues:
-    scope: auto
-  jira:
-    project_keys: []
-  linear:
-    team_keys: []
+  opt_out: false

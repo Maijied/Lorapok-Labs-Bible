@@ -2,67 +2,157 @@
 
 <br/>
 
-# ◈ Lorapok Morpheus
+```
+    ███╗   ███╗ ██████╗ ██████╗ ██████╗ ██╗  ██╗███████╗██╗   ██╗███████╗
+    ████╗ ████║██╔═══██╗██╔══██╗██╔══██╗██║  ██║██╔════╝██║   ██║██╔════╝
+    ██╔████╔██║██║   ██║██████╔╝██████╔╝███████║█████╗  ██║   ██║███████╗
+    ██║╚██╔╝██║██║   ██║██╔══██╗██╔═══╝ ██╔══██║██╔══╝  ██║   ██║╚════██║
+    ██║ ╚═╝ ██║╚██████╔╝██║  ██║██║     ██║  ██║███████╗╚██████╔╝███████║
+    ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚══════╝
 
-**The Autonomous Issue Resolver**
+       ◈  T H E   A U T O N O M O U S   I S S U E   R E S O L V E R  ◈
+```
 
-[![Platform](https://img.shields.io/badge/Platform-OpenHands-ff6b35?style=flat-square)](https://github.com/All-Hands-AI/OpenHands)
-[![Cost](https://img.shields.io/badge/Cost-Free%20%2B%20BYOK-00ff88?style=flat-square)](https://docs.all-hands.dev)
-[![Trigger](https://img.shields.io/badge/Trigger-label%3A%20fix--me-ff6b35?style=flat-square)](../../.github/workflows/openhands-resolver.yml)
+# ◈ Morpheus
 
-*"From issue to pull request, autonomously."*
+**"From issue to pull request, autonomously."**
+
+[![Platform](https://img.shields.io/badge/Platform-OpenHands-ff6b35?style=flat-square&logo=openai&logoColor=white)](https://github.com/All-Hands-AI/OpenHands)
+[![Cost](https://img.shields.io/badge/Cost-Free%20%2B%20BYOK-00ff88?style=flat-square)](https://docs.all-hands.dev/)
+[![Trigger](https://img.shields.io/badge/Trigger-label%3A%20fix--me-00e5ff?style=flat-square)](https://github.com/Maijied/Lorapok-Labs-Bible/labels/fix-me)
+[![License](https://img.shields.io/badge/License-MIT-38bdf8?style=flat-square)](../../LICENSE)
 
 </div>
 
 ---
 
+## CyberLarva — `morpheus` State
+
+```
+     ╭───────────────────────────────────╮
+     │   ◈ MORPHEUS — Resolving...       │
+     ╰───────────────────────────────────╯
+
+              ╭──────────╮
+             ╱ ⚙        ⚙ ╲         ← Gear-shaped AI processor eyes
+            │  ╰───⟐───╯  │           (autonomous decision mode)
+            │  ┌────────┐  │
+            │  │ ◈ AI ◈  │  │        ← Neural core (LLM inference)
+         ╭──┤  │ ╌╌╌╌╌╌ │  ├──╮     ← Dark-metallic armor plating
+        ╱╲  │  └────────┘  │  ╱╲
+       ╱  ╲ │  ⟦▓▓▓▓▓▓▓▓⟧  │ ╱  ╲   ← Issue parser matrix
+      ┊ ⚡ ┊│  ⟦░░░░░░░░⟧  │┊ ⚡ ┊
+      ┊ ⚡ ┊╰──────────────╯┊ ⚡ ┊   ← Energy cells (API calls active)
+       ╲  ╱ ╭──────────────╮ ╲  ╱
+        ╲╱  │  ═▶ CODE ◀═  │  ╲╱    ← Code generation output
+            │  ═▶ TEST ◀═  │
+            ╰──────────────╯
+         🔧 ╰┤ ╰┤ ╰┤ ╰┤ ╰┤ 🔧     ← Robotic legs (autonomous locomotion)
+
+     Issues go in. Pull requests come out.
+```
+
+---
+
 ## What is Morpheus?
 
+**Morpheus** is the Autonomous Issue Resolver in the Lorapok Agent Fleet. Powered by [OpenHands](https://github.com/All-Hands-AI/OpenHands), it reads GitHub issues, understands the codebase, implements fixes, runs validation, and opens pull requests — all without human intervention.
 
-**Lorapok Morpheus** is the autonomous issue resolver in the Lorapok Agent Fleet. When you label a GitHub issue with `fix-me` (or comment `@openhands-agent`), Morpheus spins up a sandboxed environment, analyzes the codebase, implements a fix, and opens a pull request — completely autonomously.
+> ### 🚨 NO COPILOT LICENSE NEEDED
+>
+> Morpheus runs entirely on **GitHub Actions** + **your own API key (BYOK)**. It uses OpenHands (open-source) with any LLM provider — including free-tier options like Google Gemini and Groq. Zero paid subscriptions required.
 
-Powered by [OpenHands](https://github.com/All-Hands-AI/OpenHands) (open-source, bring-your-own-key), Morpheus works **without requiring a GitHub Copilot license**.
+### The Morpheus Promise
+
+| Input | Output |
+|-------|--------|
+| A labeled GitHub issue | A validated pull request |
+| Bug report with steps | Fix + test + PR |
+| Feature request (simple) | Implementation + PR |
+| Refactoring request | Refactored code + PR |
 
 ---
 
 ## How It Works
 
+```mermaid
+sequenceDiagram
+    participant User as Developer
+    participant GH as GitHub
+    participant GA as GitHub Actions
+    participant OH as OpenHands + LLM
+    participant Sent as ◈ Sentinel
+
+    User->>GH: Create issue + add label "fix-me"
+    GH->>GA: Workflow triggered
+    GA->>OH: Spawn OpenHands container
+    OH->>GH: Clone repository
+    OH->>OH: Read codebase + issue context
+    OH->>OH: Plan implementation
+    OH->>OH: Write code
+    OH->>OH: Run Chrysalis Gates locally
+    OH->>GH: Open Pull Request
+    GH->>Sent: PR triggers Sentinel review
+    Sent->>GH: Posts review comments
+    User->>GH: Merge or request changes
 ```
-┌──────────────────────────────────────────────────────────────┐
-│                                                              │
-│   1. TRIGGER                                                 │
-│      └─▶ Issue labeled 'fix-me'                              │
-│      └─▶ OR comment '@openhands-agent' on any issue          │
-│                                                              │
-│   2. ENVIRONMENT SETUP                                       │
-│      └─▶ GitHub Actions spins up Ubuntu runner               │
-│      └─▶ Checks out repo, installs Node 20, runs npm ci      │
-│      └─▶ Injects LLM credentials from secrets                │
-│                                                              │
-│   3. RESOLVE                                                 │
-│      └─▶ OpenHands reads the issue description               │
-│      └─▶ Loads Morpheus macro (brand rules, validation)      │
-│      └─▶ Explores codebase, identifies relevant files        │
-│      └─▶ Implements fix following Biological UI guidelines    │
-│      └─▶ Runs Chrysalis Gates (Brand Guard + lint + build)   │
-│                                                              │
-│   4. DELIVER                                                 │
-│      └─▶ Creates branch: fix/<issue-slug>                    │
-│      └─▶ Opens PR with fix description                       │
-│      └─▶ Sentinel auto-reviews the PR                        │
-│                                                              │
-└──────────────────────────────────────────────────────────────┘
-```
+
+### Flow Breakdown
+
+| Step | Agent | Action |
+|------|-------|--------|
+| 1 | Developer | Creates issue, adds `fix-me` label |
+| 2 | GitHub Actions | Detects label, triggers workflow |
+| 3 | OpenHands | Spawns sandboxed container with repo |
+| 4 | OpenHands + LLM | Reads issue body + explores codebase |
+| 5 | OpenHands + LLM | Plans approach, writes implementation |
+| 6 | OpenHands | Runs Brand Guard + lint + build locally |
+| 7 | OpenHands | Opens PR with implementation |
+| 8 | Sentinel | Automatically reviews the PR |
+| 9 | Developer | Reviews, merges, or requests changes |
 
 ---
 
 ## Configuration
 
-### Workflow: `.github/workflows/openhands-resolver.yml`
+### Workflow File
 
-Triggers on:
-- `issues` event with `labeled` action (when label = `fix-me`)
-- `issue_comment` event (when comment starts with `@openhands-agent`)
+Create `.github/workflows/openhands.yml`:
+
+```yaml
+name: Morpheus — Autonomous Resolver
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  morpheus:
+    if: github.event.label.name == 'fix-me'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run OpenHands
+        uses: All-Hands-AI/OpenHands@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          llm-api-key: ${{ secrets.LLM_API_KEY }}
+          llm-model: ${{ secrets.LLM_MODEL }}
+          macro: |
+            You are Morpheus, part of the Lorapok Agent Fleet.
+            Follow the brand rules in .lorapok/ and copilot-instructions.md.
+            Use HashRouter, CSS Modules, typed props (no React.FC).
+            Run: node .lorapok/scripts/brand-guard.mjs before opening PR.
+            Run: cd app && npm run lint && npm run build
+            If any gate fails, fix the issue before proceeding.
+```
 
 ### Required Secrets
 
@@ -70,22 +160,63 @@ Add these in **Settings → Secrets and variables → Actions**:
 
 | Secret | Required | Description | Example |
 |--------|----------|-------------|---------|
-| `LLM_API_KEY` | ✅ | Your LLM provider API key | `sk-ant-api03-...` |
-| `LLM_MODEL` | ❌ | Model identifier (defaults to Claude Sonnet) | `anthropic/claude-sonnet-4-20250514` |
-| `LLM_BASE_URL` | ❌ | Custom LLM endpoint | `https://api.openai.com/v1` |
+| `LLM_API_KEY` | ✅ Yes | API key for your chosen LLM provider | `AIza...` (Gemini) |
+| `LLM_MODEL` | ✅ Yes | Model identifier for OpenHands | `google/gemini-2.5-flash` |
+| `GITHUB_TOKEN` | 🔄 Auto | Provided automatically by GitHub Actions | — |
 
+---
 
-### Supported LLM Providers
+## Supported LLM Providers
 
-| Provider | Model | `LLM_MODEL` Value |
-|----------|-------|-------------------|
-| Anthropic | Claude Sonnet 4 | `anthropic/claude-sonnet-4-20250514` |
-| Anthropic | Claude Opus 4 | `anthropic/claude-opus-4-20250514` |
-| OpenAI | GPT-4o | `openai/gpt-4o` |
-| OpenAI | GPT-4.1 | `openai/gpt-4.1` |
-| Google | Gemini 2.5 Pro | `google/gemini-2.5-pro` |
-| DeepSeek | DeepSeek V3 | `deepseek/deepseek-chat` |
-| Local | Ollama (any model) | Set `LLM_BASE_URL` to your endpoint |
+Morpheus works with any LLM that OpenHands supports. Choose based on your budget and performance needs:
+
+| Provider | Model | Context Window | Cost | Speed | Recommended For |
+|----------|-------|---------------|------|-------|-----------------|
+| **Google Gemini** | `google/gemini-2.5-flash` | **1M tokens** | ✅ Free | ⚡ Fast | Default choice |
+| Google Gemini | `google/gemini-2.5-pro` | 1M tokens | ✅ Free | 🔵 Medium | Complex tasks |
+| **Groq** | `groq/llama-3.3-70b` | 128K tokens | ✅ Free | ⚡⚡ Blazing | Simple fixes |
+| OpenRouter | `openrouter/ring-2.6-1t:free` | 256K tokens | ✅ Free | 🔵 Medium | Fallback option |
+| DeepSeek | `deepseek/deepseek-chat` | 128K tokens | ~Free | ⚡ Fast | Budget option |
+| Anthropic | `anthropic/claude-sonnet-4` | 200K tokens | 💰 Paid | ⚡ Fast | Premium quality |
+| OpenAI | `openai/gpt-4o` | 128K tokens | 💰 Paid | ⚡ Fast | Premium alternative |
+| **Ollama** | `ollama/llama3:70b` | 128K tokens | ✅ Free (local) | 🔵 Varies | Self-hosted |
+
+### Provider Setup
+
+<details>
+<summary><strong>Google Gemini (Recommended — Free)</strong></summary>
+
+1. Visit [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
+2. Click **"Create API Key"**
+3. Copy the key
+4. Set secrets:
+   - `LLM_API_KEY` = your key
+   - `LLM_MODEL` = `google/gemini-2.5-flash`
+
+</details>
+
+<details>
+<summary><strong>Groq (Free — Blazing Fast)</strong></summary>
+
+1. Visit [console.groq.com](https://console.groq.com)
+2. Create an API key
+3. Set secrets:
+   - `LLM_API_KEY` = your key
+   - `LLM_MODEL` = `groq/llama-3.3-70b`
+
+</details>
+
+<details>
+<summary><strong>Ollama (Free — Self-Hosted)</strong></summary>
+
+1. Install Ollama: `curl -fsSL https://ollama.com/install.sh | sh`
+2. Pull a model: `ollama pull llama3:70b`
+3. Use with self-hosted runner
+4. Set secrets:
+   - `LLM_API_KEY` = `ollama`
+   - `LLM_MODEL` = `ollama/llama3:70b`
+
+</details>
 
 ---
 
@@ -93,148 +224,244 @@ Add these in **Settings → Secrets and variables → Actions**:
 
 ### Step 1: Add Secrets
 
-1. Go to repo **Settings** → **Secrets and variables** → **Actions**
-2. Add `LLM_API_KEY` with your provider's API key
-3. (Optional) Add `LLM_MODEL` if not using the default
-
-### Step 2: Test It
-
-1. Create a test issue: *"The sidebar doesn't collapse on mobile viewport"*
-2. Add the label `fix-me`
-3. Watch the **Actions** tab — Morpheus will start resolving
-4. A PR will appear within minutes
-
-### Step 3: Review
-
-Morpheus opens a PR → Sentinel auto-reviews → You approve or request changes.
-
----
-
-## Morpheus Macro
-
-The workflow injects brand-specific instructions into OpenHands:
+Navigate to your repository → **Settings** → **Secrets and variables** → **Actions**
 
 ```
-You are Lorapok Morpheus, an autonomous issue resolver.
-
-CRITICAL CONTEXT:
-- App lives in app/, NOT the repo root
-- React 19 + TypeScript + Vite 8 + HashRouter
-- CSS Modules + design tokens
-- Check .lorapok/playbooks/ for recipes
-- Check .lorapok/chrysalis.yml for manifest
-
-BEFORE OPENING A PR, you MUST pass:
-1. node .lorapok/scripts/brand-guard.mjs
-2. cd app && npm run lint
-3. npm run build
-
-GUARDRAILS:
-- No BrowserRouter, No Tailwind, No CSS-in-JS
-- No backend deps, No `any` type
-- Data in app/src/data/*.ts only
+     ╭───────────────────────────────────╮
+     │   ◈ MORPHEUS — Configuring...     │
+     ╰───────────────────────────────────╯
 ```
 
-This ensures Morpheus follows the same rules as Chrysalis and human developers.
+Add:
+- `LLM_API_KEY` — Your API key (e.g., from Google AI Studio)
+- `LLM_MODEL` — Your model choice (e.g., `google/gemini-2.5-flash`)
+
+### Step 2: Create the Workflow
+
+Ensure `.github/workflows/openhands.yml` exists (see Configuration above).
+
+### Step 3: Test with an Issue
+
+1. Create a new issue:
+   ```
+   Title: Fix typo in HomePage heading
+   Body: The heading on the home page says "Bilding the Future" — should be "Building the Future"
+   ```
+2. Add the label: **`fix-me`**
+3. Watch the Actions tab — Morpheus activates within seconds
+
+### Step 4: Review the PR
+
+Morpheus opens a PR with:
+- The fix implemented
+- Reference to the original issue
+- Gates validation status
+
+Sentinel automatically reviews the PR once it's opened.
 
 ---
 
 ## Usage Patterns
 
-### Bug Fixes
-```
-Issue: "Navigation link to /research is broken"
-Label: fix-me
-→ Morpheus checks App.tsx routes, finds the issue, fixes it
-```
+### ✅ What Morpheus Handles Well
 
-### Simple Features
-```
-Issue: "Add LinkedIn social link to the Connect page"
-Label: fix-me
-→ Morpheus adds entry to social-links.ts data file
-```
+| Pattern | Example Issue |
+|---------|--------------|
+| **Bug fixes** | "Button color is wrong on mobile" |
+| **Simple features** | "Add a tooltip to the skill badges" |
+| **Refactoring** | "Extract the header into its own component" |
+| **Data updates** | "Add 'Rust' to the skills list" |
+| **Style fixes** | "Increase padding on the product cards" |
+| **Typo fixes** | "Fix spelling error in About page" |
+| **Config changes** | "Update the deploy workflow to Node 22" |
 
-### Refactoring
-```
-Issue: "Extract the hero section from HomePage into its own component"
-Label: fix-me
-→ Morpheus reads refactor-component playbook, creates new component
-```
+### ❌ What NOT to Assign to Morpheus
 
-
-### What Morpheus Should NOT Handle
-
-- Complex multi-page architectural changes
-- Design system overhauls
-- Dependency major version upgrades
-- Anything requiring human judgment on UX
-
-For these, use Chrysalis (with human guidance) or do it manually.
-
----
-
-## Why OpenHands?
-
-| Feature | Benefit for Lorapok |
-|---------|-------------------|
-| **Open source** | No vendor lock-in, full transparency |
-| **BYOK** | Use any LLM provider (Anthropic, OpenAI, local) |
-| **GitHub-native** | Runs as a GitHub Action, no external infra |
-| **Sandboxed** | Each resolution runs in an isolated environment |
-| **Free** | Only pay for LLM API calls (your own key) |
-| **No Copilot required** | Works without any GitHub Copilot license |
+| Pattern | Why | Use Instead |
+|---------|-----|-------------|
+| Complex multi-page features | Too many decisions required | Chrysalis + human |
+| Architecture redesigns | Requires high-level judgment | Human architect |
+| Database/API design | No backend in this project | N/A |
+| Design system changes | Aesthetic decisions need human eye | Human + Chrysalis |
+| Security-critical code | Needs expert human review | Human developer |
 
 ---
 
 ## Cost Estimation
 
-Morpheus costs = LLM API usage per resolution attempt.
+Running Morpheus costs only the LLM API calls. Here's what to expect per issue resolution:
 
-| Model | Avg Cost per Issue | Speed |
-|-------|-------------------|-------|
-| Claude Sonnet 4 | ~$0.05–0.20 | Fast |
-| GPT-4o | ~$0.03–0.15 | Fast |
-| DeepSeek V3 | ~$0.01–0.05 | Medium |
-| Local Ollama | Free (your hardware) | Varies |
+| Model | Avg Tokens/Issue | Cost/Issue | Monthly (20 issues) |
+|-------|-----------------|-----------|-------------------|
+| Gemini 2.5 Flash | ~50K | **$0.00** | **$0.00** |
+| Gemini 2.5 Pro | ~80K | **$0.00** | **$0.00** |
+| Groq Llama 3.3 | ~40K | **$0.00** | **$0.00** |
+| DeepSeek Chat | ~60K | ~$0.01 | ~$0.20 |
+| Claude Sonnet | ~60K | ~$0.45 | ~$9.00 |
+| GPT-4o | ~60K | ~$0.30 | ~$6.00 |
 
-Typical simple fixes cost under $0.10. Complex multi-file changes may cost up to $0.50.
+> **Bottom line:** With Gemini or Groq, Morpheus runs at **zero cost** for typical usage.
 
 ---
 
-## Morpheus + Fleet Integration
+## Morpheus Macro
+
+The "macro" is the brand-awareness injection that tells OpenHands how to behave as a Lorapok agent. It's embedded in the workflow configuration:
+
+```markdown
+# Morpheus Macro — Injected into OpenHands
+
+You are **Morpheus**, the Autonomous Issue Resolver for **Lorapok Labs**.
+
+## Identity
+- Part of the Lorapok Agent Fleet (Chrysalis, Sentinel, Morpheus)
+- Your code will be reviewed by Sentinel (CodeRabbit) after PR creation
+- Your code must pass the Chrysalis Gates (Brand Guard + Lint + Build)
+
+## Brand Rules
+- **Routing:** HashRouter only (never BrowserRouter — breaks GitHub Pages)
+- **Styling:** CSS Modules only (never Tailwind, styled-components, or Emotion)
+- **Components:** Arrow functions with typed props (never React.FC)
+- **Types:** Strict TypeScript (never use `any` without explicit override)
+- **Colors:** Use CSS tokens only (var(--color-neon), var(--color-cyan), etc.)
+- **Architecture:** Static frontend only (no Express, Fastify, or backend deps)
+- **Files:** PascalCase for components, camelCase for utilities
+
+## Validation Steps (Required Before PR)
+1. Run: `node .lorapok/scripts/brand-guard.mjs`
+2. Run: `cd app && npx eslint .`
+3. Run: `cd app && npm run build`
+4. If ANY step fails → fix the issue → re-run → do NOT open PR until all pass
+
+## PR Format
+- Title: `fix: [concise description]` or `feat: [concise description]`
+- Body: Reference the issue with `Closes #[number]`
+- Include what was changed and why
+```
+
+---
+
+## Fleet Integration
+
+```mermaid
+graph TD
+    subgraph "Trigger"
+        ISSUE[GitHub Issue<br/>+ label: fix-me]
+    end
+
+    subgraph "Morpheus Pipeline"
+        GA[GitHub Actions<br/>Workflow Trigger]
+        OH[OpenHands Container<br/>+ LLM Provider]
+        CODE[Read Codebase<br/>+ Plan Fix]
+        IMPL[Implement Solution]
+        GATE[Run Chrysalis Gates<br/>Brand Guard + Lint + Build]
+        PR[Open Pull Request]
+    end
+
+    subgraph "Review & Ship"
+        SENT[◈ Sentinel<br/>CodeRabbit Review]
+        MERGE[Merge & Deploy]
+    end
+
+    ISSUE --> GA --> OH --> CODE --> IMPL --> GATE --> PR --> SENT --> MERGE
+
+    style ISSUE fill:#1a237e,color:#00e5ff,stroke:#00e5ff
+    style GA fill:#1a237e,color:#00ff88,stroke:#00ff88
+    style OH fill:#ff6b35,color:#fff,stroke:#ff6b35
+    style CODE fill:#ff6b35,color:#fff,stroke:#ff6b35
+    style IMPL fill:#ff6b35,color:#fff,stroke:#ff6b35
+    style GATE fill:#00ff88,color:#0a0a0a,stroke:#00ff88
+    style PR fill:#00ff88,color:#0a0a0a,stroke:#00ff88
+    style SENT fill:#00e5ff,color:#0a0a0a,stroke:#00e5ff
+    style MERGE fill:#00e5ff,color:#0a0a0a,stroke:#00e5ff
+```
+
+### End-to-End Example
 
 ```
-1. You label issue 'fix-me'
-2. Morpheus resolves → opens PR
-3. Sentinel reviews the PR automatically
-4. CI runs Chrysalis Gates (Brand Guard + lint + build)
-5. You review and merge (or request changes)
-```
+Developer creates issue:
+  "The CyberLarva SVG doesn't animate on Safari"
+  + adds label: fix-me
 
-If Morpheus's fix isn't perfect:
-- Comment feedback on the PR
-- Comment `@openhands-agent` to request another attempt
-- Or fix it manually — Sentinel will re-review
+→ Morpheus activates (GitHub Actions)
+→ Reads issue + explores app/src/components/mascot/
+→ Identifies CSS animation incompatibility
+→ Implements webkit-prefixed animation fix
+→ Runs Brand Guard ✓ | Lint ✓ | Build ✓
+→ Opens PR: "fix: add webkit prefix for Safari animation"
+→ Sentinel reviews: approves with minor suggestion
+→ Developer merges → auto-deploys to GitHub Pages
+```
 
 ---
 
 ## Troubleshooting
 
-| Problem | Solution |
-|---------|----------|
-| Workflow doesn't trigger | Verify issue has `fix-me` label (exact match) |
-| LLM error | Check `LLM_API_KEY` secret is valid and not expired |
-| Fix is incorrect | Comment `@openhands-agent try again with: <guidance>` |
-| Times out | Reduce issue complexity, or use a faster model |
-| Brand Guard fails | Morpheus should auto-fix; if not, the PR will show the failure |
+| Symptom | Cause | Solution |
+|---------|-------|----------|
+| Workflow doesn't trigger | Label not matching | Ensure label is exactly `fix-me` (case-sensitive) |
+| OpenHands fails to start | Missing secrets | Verify `LLM_API_KEY` and `LLM_MODEL` are set |
+| LLM returns empty response | Invalid API key | Regenerate key, test with curl first |
+| PR has brand violations | Macro not loaded | Ensure `macro:` field is in workflow YAML |
+| Build fails in PR | Missing dependencies | Check that `npm ci` runs before build |
+| Sentinel doesn't review | CodeRabbit not installed | Install from GitHub Marketplace |
+| Rate limit errors | Free tier exceeded | Switch provider or wait for reset |
+| Timeout during resolution | Issue too complex | Break into smaller sub-issues |
+| Wrong file modified | Issue description unclear | Add file paths/line numbers to issue body |
+| PR references wrong issue | Multiple issues open | Use explicit `Closes #N` in issue body |
+
+### Debug Checklist
+
+```bash
+# 1. Verify secrets exist
+# Settings → Secrets → Actions → check LLM_API_KEY and LLM_MODEL
+
+# 2. Check workflow file
+cat .github/workflows/openhands.yml
+
+# 3. Verify label exists
+# Issues → Labels → ensure "fix-me" exists
+
+# 4. Check Actions logs
+# Actions tab → find the workflow run → read logs
+
+# 5. Test LLM connectivity (local)
+curl -H "Authorization: Bearer $LLM_API_KEY" \
+  "https://generativelanguage.googleapis.com/v1beta/models"
+```
 
 ---
 
+## Security Considerations
+
+| Concern | Mitigation |
+|---------|-----------|
+| API key exposure | Stored in GitHub Secrets (encrypted at rest) |
+| Malicious code generation | Sentinel reviews every Morpheus PR |
+| Repository access | Scoped to single repo via GITHUB_TOKEN |
+| Container isolation | OpenHands runs in sandboxed Docker container |
+| Branch protection | Morpheus cannot push directly to `main` |
+
+---
+
+## Related
+
 <div align="center">
 
-**Part of the [Lorapok Agent Fleet](../README.md)**
+| | Agent | Role | Link |
+|---|--------|------|------|
+| ◈ | **Chrysalis** | Brand-Compliant Builder | [→ chrysalis.md](chrysalis.md) |
+| ◈ | **Sentinel** | AI Code Reviewer | [→ sentinel.md](sentinel.md) |
+| ◈ | **Morpheus** | Autonomous Issue Resolver | *You are here* |
 
-[◈ Chrysalis](chrysalis.md) · [◈ Sentinel](sentinel.md) · ◈ Morpheus
+---
+
+**◈ Lorapok Agent Fleet** · [Fleet Overview](../README.md) · [Playbooks](../playbooks/) · [Brand Guard](../scripts/brand-guard.mjs)
+
+<br/>
+
+*"Building the Future. One Line at a Time."*
+
+[![Lorapok Labs](https://img.shields.io/badge/Lorapok%20Labs-lorapok.github.io-00ff88?style=flat-square)](https://lorapok.github.io/)
 
 </div>

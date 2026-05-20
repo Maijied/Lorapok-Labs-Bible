@@ -1,41 +1,157 @@
 # Playbook: Refactor / Extract a Component
 
-> **Trigger:** Task involves extracting, splitting, merging, or refactoring a UI component.
+## Trigger
+
+Use this playbook when a task mentions **refactoring a component**, **extracting a component**, **splitting a component**, or **creating a reusable UI element**.
+
+---
+
+## Pre-conditions
+
+- The parent component or page file exists
+- The component boundary is identifiable (repeated patterns, large render blocks, distinct concerns)
+
+---
 
 ## Checklist
 
-1. **Identify the extraction boundary**
-   - What props does the new component need?
-   - Shared → `components/ui/`, Layout → `components/layout/`, Page-specific → colocate.
+### 1. Identify the Component Boundary
 
-2. **Create the component** at the appropriate location.
+Determine what to extract based on:
+- Repeated UI patterns (→ reusable component)
+- Distinct visual section (→ layout component)
+- Self-contained logic + UI (→ feature component)
+- Components exceeding ~150 lines (→ split candidates)
 
-3. **Create CSS Module** → `<ComponentName>.module.css` in the same directory.
-   - Extract only relevant styles. Use design tokens.
+### 2. Create the Component File
 
-4. **Define Props interface** at the top of the component file.
+Place the new component in the appropriate directory:
 
-5. **Update the parent** — replace extracted JSX, remove dead imports/CSS.
+| Type | Directory | Example |
+|------|-----------|---------|
+| Reusable UI primitive | `app/src/components/ui/` | `GlassCard`, `NeonButton`, `HexBadge` |
+| Layout/structural | `app/src/components/layout/` | `Sidebar`, `AppShell`, `TitleBar` |
+| Page-specific section | `app/src/pages/` (colocated) | Section within a page |
+| Feature-specific | `app/src/components/<feature>/` | `CyberLarva` (mascot) |
 
-6. **Check for side effects** — search for references, verify animations.
+### 3. Create Colocated CSS Module
 
-7. **Validate**
-   ```bash
-   node .lorapok/scripts/brand-guard.mjs
-   cd app && npm run lint && npm run build
-   ```
+Create `<ComponentName>.module.css` in the same directory as the component.
 
-## Naming Convention
+- Import as: `import styles from './<ComponentName>.module.css';`
+- Use CSS tokens for all values (colors, spacing, radii, shadows)
+- No global styles — everything is scoped via the module
 
-| Location | Example |
-|----------|---------|
-| `components/ui/` | `GlassCard`, `HexBadge`, `NeonButton` |
-| `components/layout/` | `AppShell`, `Sidebar`, `TitleBar` |
-| `components/mascot/` | `CyberLarva` |
+### 4. Define Props Interface
 
-## Anti-Patterns
+Define a `Props` interface (not `type`) directly in the component file:
 
-- Prop drilling > 2 levels → use composition.
-- God components > 200 lines → split further.
-- Importing another component's CSS Module.
-- Using `React.FC`.
+```tsx
+interface Props {
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+}
+```
+
+- Do NOT use `React.FC` — use arrow functions with explicit return
+- Export the component as the default export
+- Accept optional `className` prop for composability
+
+### 5. Update the Parent
+
+- Replace the extracted JSX with the new component
+- Add the import statement
+- Pass required props
+- Remove any migrated CSS classes from the parent's module
+
+### 6. Check Side Effects
+
+- Verify no broken imports in other files
+- Ensure animations still work (framer-motion variants may need forwarding)
+- Check that CSS Module class references are updated in both parent and child
+
+### 7. Validate
+
+Run the full Chrysalis Gates pipeline:
+
+```bash
+# From repository root
+node .lorapok/scripts/brand-guard.mjs
+
+# From app/ directory
+cd app && npm run lint
+cd app && npm run build
+```
+
+---
+
+## Naming Conventions
+
+| Element | Convention | Example |
+|---------|-----------|---------|
+| Component file | PascalCase + `.tsx` | `GlassCard.tsx` |
+| CSS Module | PascalCase + `.module.css` | `GlassCard.module.css` |
+| Props interface | `Props` (local to file) | `interface Props { ... }` |
+| CSS class names | camelCase | `.cardWrapper`, `.titleText` |
+| Component export | `export default` | `export default GlassCard;` |
+| Utility functions | camelCase + `.ts` | `formatDate.ts` |
+
+---
+
+## Component Template
+
+```tsx
+import { motion } from 'framer-motion';
+import styles from './<ComponentName>.module.css';
+
+interface Props {
+  children: React.ReactNode;
+  className?: string;
+}
+
+function <ComponentName>({ children, className }: Props) {
+  return (
+    <motion.div
+      className={`${styles.root} ${className ?? ''}`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+export default <ComponentName>;
+```
+
+---
+
+## Anti-patterns to Avoid
+
+| Anti-pattern | Why It's Wrong | Do This Instead |
+|-------------|---------------|-----------------|
+| `React.FC<Props>` | Implicit children, legacy pattern | Arrow function with typed props |
+| Inline styles with hex | Breaks brand token system | Use CSS Module + `var(--token)` |
+| `styled.div` | CSS-in-JS is forbidden | Use `.module.css` |
+| Prop drilling > 2 levels | Creates tight coupling | Use composition or context |
+| `any` type on props | Breaks type safety | Define explicit interface |
+| Importing from parent's CSS Module | Creates circular dependency | Move shared styles to own module |
+| Giant `className` strings | Hard to read, error-prone | Use `cn()` utility helper |
+| Default export + named export | Confusing import patterns | One default export per component |
+
+---
+
+## Post-conditions
+
+After executing this playbook:
+
+- [ ] New component file exists at the appropriate location
+- [ ] Colocated CSS Module exists with token-based styles
+- [ ] Props interface is defined with proper types
+- [ ] Parent component is updated to use the new component
+- [ ] No orphaned CSS classes in parent module
+- [ ] No broken imports across the codebase
+- [ ] Brand Guard passes with zero errors
+- [ ] ESLint passes with zero errors
+- [ ] Build completes successfully
