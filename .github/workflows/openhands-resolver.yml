@@ -4,6 +4,7 @@
 # ╚══════════════════════════════════════════════════════════════════════════════╝
 #
 # Uses the OpenHands container (from ghcr.io) to resolve issues labeled 'fix-me'.
+# Runs via docker run on the host so the resolver can spawn its own runtime containers.
 #
 # Required Secrets (Settings → Secrets → Actions):
 #   LLM_API_KEY   — Your LLM provider API key
@@ -28,42 +29,41 @@ jobs:
       (github.event_name == 'issues' && github.event.label.name == 'fix-me') ||
       (github.event_name == 'issue_comment' && startsWith(github.event.comment.body, '@openhands-agent'))
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/all-hands-ai/openhands:0.27
-      options: --privileged
 
     steps:
-      - name: "◈ Checkout repository"
+      - name: "Checkout repository"
         uses: actions/checkout@v4
 
-      - name: "◈ Setup Node.js 20"
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: "◈ Install app dependencies"
-        run: cd app && npm ci
-
-      - name: "◈ Run Morpheus (OpenHands Resolver)"
+      - name: "Run Morpheus (OpenHands Resolver)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_MODEL: ${{ secrets.LLM_MODEL || 'google/gemini-2.5-flash' }}
         run: |
-          python -m openhands.resolver.resolve_issue \
-            --repo "${{ github.repository }}" \
-            --issue-number "${{ github.event.issue.number }}" \
-            --token "$GITHUB_TOKEN" \
-            --llm-model "$LLM_MODEL" \
-            --llm-api-key "$LLM_API_KEY" \
-            --issue-type issue \
-            --instructions "You are Morpheus, the Autonomous Issue Resolver for Lorapok Labs. The app lives in app/, NOT the repo root. Run npm commands from app/. React 19 + TypeScript + Vite 8 + HashRouter. CSS Modules + design tokens. Icons: Lucide React. Check .lorapok/playbooks/ for recipes. BEFORE OPENING A PR, pass: 1) node .lorapok/scripts/brand-guard.mjs 2) cd app && npm run lint 3) npm run build. GUARDRAILS: No BrowserRouter, No Tailwind, No CSS-in-JS, No backend deps, No any type without brand-guard-ignore. Data in app/src/data/*.ts only. Arrow functions with typed Props (no React.FC)."
+          docker run --rm \
+            --privileged \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v ${{ github.workspace }}:/workspace \
+            -e GITHUB_TOKEN="$GITHUB_TOKEN" \
+            -e LLM_API_KEY="$LLM_API_KEY" \
+            -e LLM_MODEL="$LLM_MODEL" \
+            -w /workspace \
+            ghcr.io/all-hands-ai/openhands:0.27 \
+            python -m openhands.resolver.resolve_issue \
+              --repo "${{ github.repository }}" \
+              --issue-number "${{ github.event.issue.number }}" \
+              --token "$GITHUB_TOKEN" \
+              --username "${{ github.repository_owner }}" \
+              --llm-model "$LLM_MODEL" \
+              --llm-api-key "$LLM_API_KEY" \
+              --issue-type issue \
+              --repo-instruction-file "/workspace/.openhands/instructions.md"
 
-      - name: "◈ Morpheus Complete"
+      - name: "Morpheus Complete"
         if: always()
         run: |
           echo ""
           echo "  ╔══════════════════════════════════════════════════╗"
-          echo "  ║  ◈ LORAPOK MORPHEUS — Resolution Attempted      ║"
+          echo "  ║  LORAPOK MORPHEUS — Resolution Attempted        ║"
           echo "  ╚══════════════════════════════════════════════════╝"
           echo ""
