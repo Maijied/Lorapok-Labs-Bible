@@ -1,0 +1,2 @@
+# This directory stores Brand Guard and agent log files.
+# Log files are gitignored — only .gitkeep is tracked.

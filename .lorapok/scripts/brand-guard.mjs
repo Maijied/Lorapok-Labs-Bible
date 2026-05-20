@@ -1,30 +1,26 @@
 #!/usr/bin/env node
 // ╔══════════════════════════════════════════════════════════════════════════════╗
-// ║  LORAPOK CHRYSALIS — Brand Guard Engine v1.0.0                             ║
-// ║  Zero-dependency brand compliance scanner.                                 ║
+// ║  LORAPOK CHRYSALIS — Brand Guard Engine v2.0.0                             ║
+// ║  Zero-dependency brand compliance scanner with CyberLarva animations.      ║
 // ║  "No PR ships off-brand."                                                  ║
 // ╚══════════════════════════════════════════════════════════════════════════════╝
 //
 // Scans `app/src/` for patterns that violate the Lorapok Biological UI design
 // system and project architecture rules.
 //
-// Runs in CI (copilot-setup-steps, openhands-resolver) AND locally.
-// Zero dependencies — uses only Node.js built-ins (fs, path).
-//
-// Exit codes:
-//   0 = All checks passed
-//   1 = Brand violations detected (errors)
-//   2 = Script error
+// Exit codes:  0 = passed | 1 = errors (blocking) | 2 = script crash
 //
 // Usage:
 //   node .lorapok/scripts/brand-guard.mjs
 //   node .lorapok/scripts/brand-guard.mjs --verbose
 //   node .lorapok/scripts/brand-guard.mjs --fix-suggestions
 //   node .lorapok/scripts/brand-guard.mjs --json
+//   node .lorapok/scripts/brand-guard.mjs --no-log   (skip log file)
 
 import { readdir, readFile, stat } from 'node:fs/promises';
 import { join, relative, extname } from 'node:path';
 import { argv, exit, cwd } from 'node:process';
+import { Logger } from './logger.mjs';
 
 // ─── Configuration ───────────────────────────────────────────────────────────
 
@@ -33,6 +29,9 @@ const SCAN_DIR = join(ROOT, 'app', 'src');
 const VERBOSE = argv.includes('--verbose');
 const FIX_SUGGESTIONS = argv.includes('--fix-suggestions');
 const JSON_OUTPUT = argv.includes('--json');
+const NO_LOG = argv.includes('--no-log');
+
+const log = new Logger('brand-guard', { silent: JSON_OUTPUT, noFile: NO_LOG });
 
 const SCAN_EXTENSIONS = new Set([
   '.ts', '.tsx', '.js', '.jsx', '.mjs', '.css', '.html', '.json',
@@ -67,7 +66,7 @@ const RULES = [
     pattern: /(?:from|require\s*\()\s*['"](?:express|fastify|koa|hono|next|nuxt)['"]/g,
     message: 'Backend/SSR framework import detected — zero-backend static site.',
     severity: 'error',
-    suggestion: 'Remove the server-side dependency. This project deploys to GitHub Pages.',
+    suggestion: 'Remove the server-side dependency. Deploys to GitHub Pages.',
   },
   {
     id: 'no-any-type',
@@ -88,14 +87,14 @@ const RULES = [
     pattern: /:\s*React\.FC\b|:\s*FC</g,
     message: 'React.FC usage detected — prefer explicit return types.',
     severity: 'warn',
-    suggestion: 'Remove React.FC; type props directly: function Comp(props: Props) {}',
+    suggestion: 'Remove React.FC; type props directly.',
   },
   {
     id: 'no-direct-main-push',
     pattern: /git\s+push\s+(?:origin\s+)?main/g,
     message: 'Direct push to main referenced — use feature branches.',
     severity: 'warn',
-    suggestion: 'Push to a feature branch and open a PR instead.',
+    suggestion: 'Push to a feature branch and open a PR.',
   },
 ];
 
@@ -144,79 +143,50 @@ function scanFile(filePath, content) {
   return violations;
 }
 
-// ─── Reporter ────────────────────────────────────────────────────────────────
-
-function printHeader() {
-  if (JSON_OUTPUT) return;
-  console.log('');
-  console.log('  \x1b[36m╔══════════════════════════════════════════════════════════╗\x1b[0m');
-  console.log('  \x1b[36m║\x1b[0m  \x1b[32m◈ LORAPOK CHRYSALIS — Brand Guard v1.0.0\x1b[0m           \x1b[36m║\x1b[0m');
-  console.log('  \x1b[36m║\x1b[0m  \x1b[90m"No PR ships off-brand."\x1b[0m                             \x1b[36m║\x1b[0m');
-  console.log('  \x1b[36m╚══════════════════════════════════════════════════════════╝\x1b[0m');
-  console.log('');
-}
-
-function printViolation(v) {
-  if (JSON_OUTPUT) return;
-  const icon = v.rule.severity === 'error' ? '\x1b[31m✖\x1b[0m' : '\x1b[33m⚠\x1b[0m';
-  const sevColor = v.rule.severity === 'error' ? '\x1b[31m' : '\x1b[33m';
-  console.log(`  ${icon} ${sevColor}${v.rule.id}\x1b[0m`);
-  console.log(`    \x1b[90m${v.file}:${v.line}:${v.col}\x1b[0m`);
-  console.log(`    ${v.rule.message}`);
-  if (FIX_SUGGESTIONS && v.rule.suggestion) {
-    console.log(`    \x1b[36m↳ Fix: ${v.rule.suggestion}\x1b[0m`);
-  }
-  if (VERBOSE) {
-    console.log(`    \x1b[90mMatched: "${v.match}"\x1b[0m`);
-  }
-  console.log('');
-}
-
-function printSummary(errors, warnings, filesScanned) {
-  if (JSON_OUTPUT) return;
-  console.log('  \x1b[90m──────────────────────────────────────────────────────────\x1b[0m');
-  console.log(`  Files scanned: \x1b[36m${filesScanned}\x1b[0m`);
-  if (errors === 0 && warnings === 0) {
-    console.log('  \x1b[32m✓ All brand checks passed. The chrysalis holds.\x1b[0m');
-  } else {
-    if (errors > 0) console.log(`  \x1b[31m✖ ${errors} error${errors > 1 ? 's' : ''}\x1b[0m (blocking)`);
-    if (warnings > 0) console.log(`  \x1b[33m⚠ ${warnings} warning${warnings > 1 ? 's' : ''}\x1b[0m (advisory)`);
-  }
-  console.log('');
-}
-
 // ─── Main ────────────────────────────────────────────────────────────────────
 
 async function main() {
-  printHeader();
+  // Show the CyberLarva working animation
+  log.larva('working');
+  log.header('LORAPOK CHRYSALIS — Brand Guard v2.0.0');
 
+  // Verify scan directory
   try {
     await stat(SCAN_DIR);
   } catch {
     if (JSON_OUTPUT) {
       console.log(JSON.stringify({ error: `Scan directory not found: ${SCAN_DIR}` }));
     } else {
-      console.error(`  \x1b[31m✖ Scan directory not found: ${SCAN_DIR}\x1b[0m`);
-      console.error('  \x1b[90mRun this script from the repository root.\x1b[0m');
+      log.error(`Scan directory not found: ${SCAN_DIR}`);
+      log.info('Run this script from the repository root.');
+      log.larva('error');
     }
     exit(2);
   }
 
+  // Collect and scan
   const files = await collectFiles(SCAN_DIR);
-  const allViolations = [];
+  log.info(`Scanning ${files.length} files in app/src/...`);
 
+  const allViolations = [];
   for (const file of files) {
     const content = await readFile(file, 'utf-8');
-    allViolations.push(...scanFile(file, content));
+    const violations = scanFile(file, content);
+    allViolations.push(...violations);
   }
 
+  // Sort: errors first
   allViolations.sort((a, b) => {
     if (a.rule.severity === b.rule.severity) return 0;
     return a.rule.severity === 'error' ? -1 : 1;
   });
 
+  // JSON output mode
   if (JSON_OUTPUT) {
     console.log(JSON.stringify({
+      agent: 'lorapok-chrysalis/brand-guard',
+      version: '2.0.0',
+      timestamp: new Date().toISOString(),
       filesScanned: files.length,
       errors: allViolations.filter(v => v.rule.severity === 'error').length,
       warnings: allViolations.filter(v => v.rule.severity === 'warn').length,
@@ -230,22 +200,51 @@ async function main() {
         suggestion: v.rule.suggestion,
       })),
     }, null, 2));
-  } else {
-    for (const v of allViolations) printViolation(v);
+    exit(allViolations.filter(v => v.rule.severity === 'error').length > 0 ? 1 : 0);
+  }
+
+  // Print violations
+  log.divider();
+  for (const v of allViolations) {
+    if (v.rule.severity === 'error') {
+      log.error(`[${v.rule.id}] ${v.file}:${v.line}:${v.col}`, {
+        message: v.rule.message,
+        ...(FIX_SUGGESTIONS && { fix: v.rule.suggestion }),
+        ...(VERBOSE && { matched: v.match }),
+      });
+    } else {
+      log.warn(`[${v.rule.id}] ${v.file}:${v.line}:${v.col}`, {
+        message: v.rule.message,
+        ...(FIX_SUGGESTIONS && { fix: v.rule.suggestion }),
+        ...(VERBOSE && { matched: v.match }),
+      });
+    }
   }
 
   const errors = allViolations.filter(v => v.rule.severity === 'error').length;
   const warnings = allViolations.filter(v => v.rule.severity === 'warn').length;
 
-  printSummary(errors, warnings, files.length);
+  // Show result larva
+  if (errors === 0 && warnings === 0) {
+    log.larva('success');
+  } else if (errors > 0) {
+    log.larva('error');
+  }
+
+  // Print summary
+  log.summary({ files: files.length, errors, warnings });
+
+  // Write log file
+  const logPath = await log.flush();
+  if (logPath) {
+    log.info(`Log written: ${relative(ROOT, logPath)}`);
+  }
+
   exit(errors > 0 ? 1 : 0);
 }
 
 main().catch((err) => {
-  if (JSON_OUTPUT) {
-    console.log(JSON.stringify({ error: err.message }));
-  } else {
-    console.error('  \x1b[31m✖ Brand Guard crashed:\x1b[0m', err.message);
-  }
-  exit(2);
+  log.error(`Brand Guard crashed: ${err.message}`);
+  log.larva('error');
+  log.flush().then(() => exit(2));
 });
