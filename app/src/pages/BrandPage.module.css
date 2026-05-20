@@ -1,0 +1,120 @@
+.page {
+  max-width: var(--content-max-width);
+}
+
+.header {
+  margin-bottom: var(--space-10);
+}
+
+.header h1 {
+  margin-bottom: var(--space-3);
+}
+
+.section {
+  margin-bottom: var(--space-16);
+}
+
+.section h2 {
+  margin-bottom: var(--space-6);
+}
+
+.mascotShowcase {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+.mascotInfo h3 {
+  margin-bottom: var(--space-3);
+  color: var(--neon-green);
+}
+
+.mascotInfo p {
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-2);
+}
+
+.colorGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-4);
+}
+
+.colorCard {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-default);
+}
+
+.colorSwatch {
+  height: 80px;
+}
+
+.colorMeta {
+  padding: var(--space-3);
+  background: var(--bg-elevated);
+}
+
+.colorName {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  margin-bottom: var(--space-1);
+}
+
+.colorHex {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+.typeSpecimen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.typeRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-6);
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.typeLabel {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.principles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-4);
+}
+
+.principleNum {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--neon-green);
+  margin-bottom: var(--space-2);
+}
+
+.principleTitle {
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-2);
+}
+
+.principleDesc {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+@media (max-width: 640px) {
+  .mascotShowcase {
+    flex-direction: column;
+  }
+}
