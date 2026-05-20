@@ -63,7 +63,8 @@ class TestWorkflowTriggers(unittest.TestCase):
         self.on = self.wf.get(True, {})
 
     def test_on_section_present(self):
-        self.assertIsNotNone(self.on)
+        self.assertTrue(self.on, "on section must be present and non-empty")
+        self.assertGreater(len(self.on), 0, "on section must contain at least one trigger")
 
     def test_issues_labeled_trigger(self):
         """Pre-existing trigger must still be present."""
@@ -169,7 +170,9 @@ class TestWorkflowJobInputs(unittest.TestCase):
         self.with_block = self.wf["jobs"]["morpheus"].get("with", {})
 
     def test_with_block_present(self):
-        self.assertIsNotNone(self.with_block)
+        workflow_definition = self.wf["jobs"]["morpheus"]
+        self.assertIn("with", workflow_definition, "with block must be present")
+        self.assertTrue(workflow_definition["with"], "with block must be non-empty")
 
     def test_macro_input_is_openhands_agent(self):
         """Trigger macro set to '@openhands-agent' as documented in the file header."""
@@ -205,7 +208,9 @@ class TestWorkflowJobSecrets(unittest.TestCase):
         self.secrets_block = self.wf["jobs"]["morpheus"].get("secrets", {})
 
     def test_secrets_block_present(self):
-        self.assertIsNotNone(self.secrets_block)
+        workflow_definition = self.wf["jobs"]["morpheus"]
+        self.assertIn("secrets", workflow_definition, "secrets block must be present")
+        self.assertTrue(workflow_definition["secrets"], "secrets block must be non-empty")
 
     def test_pat_token_secret_passed(self):
         """New required secret: PAT_TOKEN."""
