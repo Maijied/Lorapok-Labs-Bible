@@ -10,7 +10,7 @@ CRITICAL CONTEXT:
 BEFORE OPENING A PR, you MUST pass all three gates:
 1. node .lorapok/scripts/brand-guard.mjs (from repo root)
 2. cd app && npm run lint
-3. npm run build
+3. cd app && npm run build
 
 GUARDRAILS:
 - No BrowserRouter (use HashRouter only).
