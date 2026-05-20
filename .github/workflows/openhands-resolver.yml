@@ -3,14 +3,14 @@
 # ║  "From issue to pull request, autonomously."                               ║
 # ╚══════════════════════════════════════════════════════════════════════════════╝
 #
-# Uses the OpenHands resolver (pip package) to automatically resolve issues
-# labeled with 'fix-me'. No external GitHub Action needed.
+# Uses the OpenHands Docker container to resolve issues labeled 'fix-me'.
+# This is the officially supported method — runs the resolver inside Docker.
 #
 # Required Secrets (Settings → Secrets → Actions):
 #   LLM_API_KEY   — Your LLM provider API key
 #   LLM_MODEL     — Model name (default: google/gemini-2.5-flash)
 #
-# Docs: https://pypi.org/project/openhands-resolver/
+# Docs: https://docs.all-hands.dev/usage/how-to/github-action
 
 name: "Lorapok Morpheus — Issue Resolver"
 
@@ -36,11 +36,6 @@ jobs:
       - name: "◈ Checkout repository"
         uses: actions/checkout@v4
 
-      - name: "◈ Setup Python 3.12"
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
       - name: "◈ Setup Node.js 20"
         uses: actions/setup-node@v4
         with:
@@ -52,22 +47,32 @@ jobs:
         run: npm ci
         working-directory: app
 
-      - name: "◈ Install OpenHands Resolver"
-        run: pip install openhands-resolver
-
-      - name: "◈ Run Morpheus (OpenHands Resolver)"
+      - name: "◈ Run Morpheus (OpenHands Docker)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_MODEL: ${{ secrets.LLM_MODEL || 'google/gemini-2.5-flash' }}
+          SANDBOX_RUNTIME_CONTAINER_IMAGE: "docker.all-hands.dev/all-hands-ai/runtime:0.38-nikolaik"
         run: |
-          python -m openhands_resolver.resolve_issue \
-            --repo "${{ github.repository }}" \
-            --issue-number "${{ github.event.issue.number }}" \
-            --token "$GITHUB_TOKEN" \
-            --llm-api-key "$LLM_API_KEY" \
-            --llm-model "$LLM_MODEL" \
-            --instructions "You are Morpheus, the Autonomous Issue Resolver for Lorapok Labs.
+          # Pull and run OpenHands resolver via Docker
+          docker pull docker.all-hands.dev/all-hands-ai/openhands:0.38
+
+          docker run --rm \
+            -e LLM_API_KEY="$LLM_API_KEY" \
+            -e LLM_MODEL="$LLM_MODEL" \
+            -e GITHUB_TOKEN="$GITHUB_TOKEN" \
+            -e SANDBOX_RUNTIME_CONTAINER_IMAGE="$SANDBOX_RUNTIME_CONTAINER_IMAGE" \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v $(pwd):/workspace \
+            docker.all-hands.dev/all-hands-ai/openhands:0.38 \
+            python -m openhands.resolver.resolve_issue \
+              --repo "${{ github.repository }}" \
+              --issue-number "${{ github.event.issue.number }}" \
+              --token "$GITHUB_TOKEN" \
+              --llm-model "$LLM_MODEL" \
+              --llm-api-key "$LLM_API_KEY" \
+              --issue-type issue \
+              --instructions "You are Morpheus, the Autonomous Issue Resolver for Lorapok Labs.
 
           CRITICAL CONTEXT:
           - The app lives in app/, NOT the repo root. Run npm commands from app/.
@@ -87,12 +92,7 @@ jobs:
           - No backend deps (express/fastify/koa).
           - No any type without // brand-guard-ignore comment.
           - Data belongs in app/src/data/*.ts, not hardcoded in pages.
-          - Components use arrow functions with typed Props (no React.FC).
-
-          PR FORMAT:
-          - Branch: fix/<issue-slug>
-          - Title: fix: <concise description>
-          - Body: Reference issue with Closes #<number>"
+          - Components use arrow functions with typed Props (no React.FC)."
 
       - name: "◈ Morpheus Complete"
         if: always()
