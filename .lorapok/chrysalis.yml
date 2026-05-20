@@ -1,0 +1,132 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  LORAPOK CHRYSALIS — Agent Manifest                                        ║
+# ║  "Where ideas metamorphose into shippable code."                           ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+#
+# This manifest describes the Lorapok Chrysalis coding agent — a brand-aware,
+# playbook-driven GitHub Copilot Coding Agent designed for the Lorapok Labs
+# ecosystem. It is machine-readable so future Lorapok tooling (CLI, GitHub App,
+# Marketplace listing) can auto-discover agent capabilities.
+
+apiVersion: lorapok.dev/v1
+kind: CodingAgent
+
+metadata:
+  name: Lorapok Chrysalis
+  slug: lorapok-chrysalis
+  version: 1.0.0
+  description: >
+    A brand-compliant, playbook-driven AI coding agent that silently consumes
+    bottlenecks and ships on-brand code — embodying the Lorapok philosophy of
+    "Products That Feel Alive."
+  tagline: "Where ideas metamorphose into shippable code."
+  author: Lorapok Labs
+  license: MIT
+  repository: https://github.com/Maijied/Lorapok-Labs-Bible
+  homepage: https://lorapok.github.io/
+  icon: .lorapok/assets/chrysalis-icon.svg
+  mascot: CyberLarva — cybernetic Black Soldier Fly Larva
+
+# ─── Brand Identity ───────────────────────────────────────────────────────────
+
+brand:
+  organization: Lorapok Labs
+  mission: "Building the Future. One Line at a Time."
+  themes:
+    - Zero-config efficiency
+    - Silent background optimization
+    - Playful neuroscience
+    - Digital metamorphosis
+  aesthetic:
+    style: Minimalist premium 3D, cyber-industrial, biological-tech fusion
+    palette:
+      background: "#0a0a0a"        # Pitch-black / deep charcoal
+      primary: "#00ff88"           # Intense neon-green
+      secondary: "#00e5ff"         # Electric cyan
+      accent: "#1a237e"            # Dark-blue hexagonal frames
+      surface: "rgba(255,255,255,0.04)"  # Glassmorphic panels
+    atmosphere:
+      - Low-key cinematic lighting
+      - Volumetric neon glow
+      - Soft bloom effects
+      - 3D depth of field
+      - Crisp rim lighting on metallic surfaces
+
+# ─── Agent Capabilities ───────────────────────────────────────────────────────
+
+capabilities:
+  platform: github-copilot-coding-agent
+  runtime:
+    node: "20"
+    packageManager: npm
+    workingDirectory: app/
+
+  # The agent MUST pass these checks before opening any PR.
+  validation:
+    - name: brand-guard
+      description: Zero-dep brand compliance — blocks off-brand patterns
+      command: node .lorapok/scripts/brand-guard.mjs
+    - name: lint
+      description: ESLint strict pass
+      command: npm run lint
+      cwd: app/
+    - name: build
+      description: TypeScript + Vite production build
+      command: npm run build
+      cwd: app/
+
+  # Playbooks the agent can invoke based on task type.
+  playbooks:
+    directory: .lorapok/playbooks/
+    catalog:
+      - id: add-page
+        trigger: "task mentions adding a new page or route"
+        file: add-page.md
+      - id: add-product
+        trigger: "task mentions adding a product to the catalog"
+        file: add-product.md
+      - id: refactor-component
+        trigger: "task involves extracting, splitting, or refactoring a component"
+        file: refactor-component.md
+      - id: add-data-entry
+        trigger: "task involves adding achievements, skills, or social links"
+        file: add-data-entry.md
+
+  # Hard constraints the agent must never violate.
+  guardrails:
+    forbidden_patterns:
+      - pattern: "BrowserRouter"
+        reason: "HashRouter is required for GitHub Pages deep links"
+      - pattern: "tailwindcss"
+        reason: "Project uses CSS Modules + design tokens exclusively"
+      - pattern: "styled-components|@emotion|css-in-js"
+        reason: "CSS-in-JS libraries conflict with the Biological UI design system"
+      - pattern: "express|fastify|koa|hono"
+        reason: "This is a zero-backend static site"
+      - pattern: "any\\s*;"
+        reason: "TypeScript strict mode — use unknown and narrow instead"
+    forbidden_files:
+      - "app/dist/**"
+      - "node_modules/**"
+      - "app/package-lock.json (manual edits)"
+
+# ─── Ecosystem Links ──────────────────────────────────────────────────────────
+
+ecosystem:
+  website: https://lorapok.github.io/
+  github_org: https://github.com/Lorapok
+  linkedin: https://www.linkedin.com/showcase/lorapok/
+  reddit: https://www.reddit.com/r/LorapokLabs/
+  instagram: https://www.instagram.com/lorapoklabs/
+  facebook: https://www.facebook.com/lorapoklabs
+  products:
+    - name: Lorapok Atlas API Directory
+      url: https://maijied.github.io/Lorapok-API_Atlas/
+    - name: Roast as a Service (RaaS)
+      url: https://maijied.github.io/roast-as-a-service/
+    - name: Lorapok Dynamic Ollama LLM Chat
+      url: https://maijied.github.io/Lorapok-Dynamic-Ollama-LLM-Chat-Interface/
+    - name: Lorapok AI Agent
+      url: https://github.com/Maijied/Lorapok_AI_Agent
+    - name: Laravel Execution Monitor
+      url: https://packagist.org/packages/lorapok/laravel-execution-monitor
