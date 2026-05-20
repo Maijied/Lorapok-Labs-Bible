@@ -41,7 +41,6 @@ jobs:
           LLM_MODEL: ${{ secrets.LLM_MODEL || 'google/gemini-2.5-flash' }}
         run: |
           docker run --rm \
-            --privileged \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v ${{ github.workspace }}:/workspace \
             -e GITHUB_TOKEN="$GITHUB_TOKEN" \
