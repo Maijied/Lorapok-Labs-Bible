@@ -16,7 +16,7 @@ export const socialLinks: SocialLink[] = [
   {
     id: 'producthunt',
     name: 'Product Hunt',
-    url: 'https://producthunt.com/products/lorapok-atlas-api-directory',
+    url: 'https://www.producthunt.com/products/lorapok-atlas-api-directory',
     icon: 'Rocket',
   },
   {
