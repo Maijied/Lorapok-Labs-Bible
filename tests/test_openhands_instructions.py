@@ -144,13 +144,13 @@ class TestValidationGates(unittest.TestCase):
     def test_lint_runs_in_app_dir(self):
         """Gate 2 must change to app/ directory before running lint."""
         lines = self.content.splitlines()
-        lint_line = next((l for l in lines if "npm run lint" in l), "")
+        lint_line = next((line for line in lines if "npm run lint" in line), "")
         self.assertIn("cd app", lint_line)
 
     def test_build_runs_in_app_dir(self):
         """Gate 3 must change to app/ directory before running build."""
         lines = self.content.splitlines()
-        build_line = next((l for l in lines if "npm run build" in l), "")
+        build_line = next((line for line in lines if "npm run build" in line), "")
         self.assertIn("cd app", build_line)
 
 
@@ -240,7 +240,7 @@ class TestContentStructureAndFormat(unittest.TestCase):
 
     def test_line_count_is_reasonable(self):
         """File should be concise — not too short (trivial) or too long (bloated)."""
-        non_empty = [l for l in self.lines if l.strip()]
+        non_empty = [line for line in self.lines if line.strip()]
         self.assertGreaterEqual(len(non_empty), 10, "File seems too short")
         self.assertLessEqual(len(non_empty), 100, "File seems unexpectedly long")
 
@@ -264,6 +264,8 @@ class TestGuardrailsCompleteness(unittest.TestCase):
             if "GUARDRAILS" in line:
                 in_guardrails = True
                 continue
+            if in_guardrails and line.strip() and line.strip().isupper() and not line.lstrip().startswith("-"):
+                break
             if in_guardrails and line.startswith("-"):
                 bullets.append(line)
         return bullets
