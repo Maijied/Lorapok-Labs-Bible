@@ -1,0 +1,97 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  LORAPOK MORPHEUS — OpenHands Issue Resolver                               ║
+# ║  "From issue to pull request, autonomously."                               ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+#
+# This workflow uses OpenHands (open-source AI coding agent) to automatically
+# resolve GitHub issues. Label any issue with `fix-me` or comment with
+# `@openhands-agent` and Morpheus will attempt a fix.
+#
+# Prerequisites (GitHub Secrets):
+#   LLM_API_KEY         — Your LLM provider API key (OpenAI, Anthropic, etc.)
+#   LLM_MODEL           — Model name (e.g. "anthropic/claude-sonnet-4-20250514", "gpt-4o")
+#   LLM_BASE_URL        — (Optional) Custom LLM endpoint URL
+#
+# Docs: https://docs.all-hands.dev/modules/usage/how-to/github-action
+
+name: "Lorapok Morpheus — Issue Resolver"
+
+on:
+  issues:
+    types: [labeled]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  morpheus-resolve:
+    # Only run when:
+    # 1. Issue is labeled 'fix-me', OR
+    # 2. A comment starts with '@openhands-agent'
+    if: |
+      (github.event_name == 'issues' && github.event.label.name == 'fix-me') ||
+      (github.event_name == 'issue_comment' && startsWith(github.event.comment.body, '@openhands-agent'))
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "◈ Checkout"
+        uses: actions/checkout@v4
+
+      - name: "◈ Setup Node.js 20"
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: "◈ Install dependencies"
+        run: npm ci
+        working-directory: app
+
+      - name: "◈ Run OpenHands Resolver"
+        uses: All-Hands-AI/OpenHands@main
+        env:
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_MODEL: ${{ secrets.LLM_MODEL || 'anthropic/claude-sonnet-4-20250514' }}
+          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL || '' }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          # Morpheus-specific instructions — it reads the Chrysalis playbooks
+          macro: |
+            You are Lorapok Morpheus, an autonomous issue resolver for the Lorapok Labs ecosystem.
+
+            CRITICAL CONTEXT:
+            - The app lives in `app/`, NOT the repo root. Run npm commands from `app/`.
+            - This is a React 19 + TypeScript + Vite 8 project using HashRouter.
+            - Styling: CSS Modules + design tokens (app/src/styles/tokens.css).
+            - Icons: Lucide React.
+            - Check .lorapok/playbooks/ for step-by-step recipes.
+            - Check .lorapok/chrysalis.yml for full agent manifest.
+
+            BEFORE OPENING A PR, you MUST pass:
+            1. node .lorapok/scripts/brand-guard.mjs  (from repo root)
+            2. cd app && npm run lint
+            3. npm run build
+
+            GUARDRAILS:
+            - No BrowserRouter (use HashRouter).
+            - No Tailwind, no CSS-in-JS, no backend deps.
+            - No `any` type without `// brand-guard-ignore`.
+            - Data belongs in app/src/data/*.ts, not hardcoded in pages.
+
+            PR BRANCH: fix/<issue-slug>
+            PR TITLE: fix: <concise description>
+
+      - name: "◈ Morpheus Complete"
+        if: success()
+        run: |
+          echo ""
+          echo "  ╔══════════════════════════════════════════════════╗"
+          echo "  ║  ◈ LORAPOK MORPHEUS — Resolution Attempted      ║"
+          echo "  ║  Check the opened PR for the proposed fix.      ║"
+          echo "  ╚══════════════════════════════════════════════════╝"
+          echo ""
