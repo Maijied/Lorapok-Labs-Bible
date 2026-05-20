@@ -52,6 +52,32 @@ jobs:
       - name: "◈ Install app dependencies"
         run: cd app && npm ci
 
+      - name: "◈ Write Morpheus instructions file"
+        run: |
+          cat > /tmp/morpheus-instructions.md << 'EOF'
+          You are Morpheus, the Autonomous Issue Resolver for Lorapok Labs.
+
+          CRITICAL CONTEXT:
+          - The app lives in app/, NOT the repo root. Run npm commands from app/.
+          - React 19 + TypeScript + Vite 8 + HashRouter (GitHub Pages).
+          - Styling: CSS Modules + design tokens (app/src/styles/tokens.css).
+          - Icons: Lucide React (PascalCase names).
+          - Check .lorapok/playbooks/ for step-by-step recipes.
+
+          BEFORE OPENING A PR, you MUST pass all three gates:
+          1. node .lorapok/scripts/brand-guard.mjs (from repo root)
+          2. cd app && npm run lint
+          3. npm run build
+
+          GUARDRAILS:
+          - No BrowserRouter (use HashRouter only).
+          - No Tailwind, no CSS-in-JS (styled-components/Emotion).
+          - No backend deps (express/fastify/koa).
+          - No any type without // brand-guard-ignore comment.
+          - Data belongs in app/src/data/*.ts, not hardcoded in pages.
+          - Components use arrow functions with typed Props (no React.FC).
+          EOF
+
       - name: "◈ Run Morpheus (OpenHands Resolver)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -66,7 +92,7 @@ jobs:
             --llm-model "$LLM_MODEL" \
             --llm-api-key "$LLM_API_KEY" \
             --issue-type issue \
-            --instructions "You are Morpheus, the Autonomous Issue Resolver for Lorapok Labs. The app lives in app/, NOT the repo root. Run npm commands from app/. React 19 + TypeScript + Vite 8 + HashRouter. CSS Modules + design tokens. Icons: Lucide React. Check .lorapok/playbooks/ for recipes. BEFORE OPENING A PR, pass: 1) node .lorapok/scripts/brand-guard.mjs 2) cd app && npm run lint 3) npm run build. GUARDRAILS: No BrowserRouter, No Tailwind, No CSS-in-JS, No backend deps, No any type without brand-guard-ignore. Data in app/src/data/*.ts only. Arrow functions with typed Props (no React.FC)."
+            --repo-instruction-file /tmp/morpheus-instructions.md
 
       - name: "◈ Morpheus Complete"
         if: always()
