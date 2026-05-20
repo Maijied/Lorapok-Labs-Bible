@@ -1,39 +1,101 @@
-# Playbook: Add a Product to the Catalog
+# Playbook: Add a Product
 
-> **Trigger:** Task mentions adding a new product, tool, or project.
+## Trigger
+
+Use this playbook when a task mentions **adding a product**, **adding a tool**, or **registering a new project** in the product catalog.
+
+---
+
+## Pre-conditions
+
+- `app/src/data/products.ts` exists and exports the `products` array
+- `app/src/types/index.ts` defines the `Product` interface
+
+---
 
 ## Checklist
 
-1. **Add product data** in `app/src/data/products.ts`
-   - Required fields: `id`, `name`, `description`, `url`, `icon`, `status`, `tags`.
-   - Use a unique slug-style `id`.
+### 1. Add Entry to Products Data
 
-2. **Verify type compliance** — must satisfy the `Product` interface in `app/src/types/index.ts`.
+Add a new object to the `products` array in `app/src/data/products.ts`.
 
-3. **No page edits needed** — `ProductsPage.tsx` renders dynamically.
+### 2. Verify Type Compliance
 
-4. **Validate**
-   ```bash
-   node .lorapok/scripts/brand-guard.mjs
-   cd app && npm run lint && npm run build
-   ```
+Ensure the entry satisfies the `Product` interface:
 
-## Example Entry
-
-```typescript
-{
-  id: 'lorapok-brainspark',
-  name: 'Lorapok BrainSpark',
-  description: 'Neural micro-games that sharpen cognitive reflexes in 60-second bursts.',
-  url: 'https://lorapok.github.io/brainspark',
-  icon: 'Brain',
-  status: 'live',
-  tags: ['web-game', 'neuroscience', 'pwa'],
+```ts
+export interface Product {
+  id: string;           // kebab-case identifier
+  name: string;         // Full product name
+  tagline: string;      // Short subtitle (2-4 words)
+  description: string;  // One sentence, active voice
+  icon: string;         // Lucide React icon name (PascalCase)
+  platforms: string[];  // Deployment targets
+  status: 'active' | 'beta' | 'archived';
+  url: string;          // Product/landing page URL
+  github?: string;      // Optional GitHub URL
+  color?: string;       // Optional accent color token
 }
 ```
 
+### 3. No Page Edits Needed
+
+The `ProductsPage` renders dynamically from the `products` array. No page modifications are required unless a custom detail page is being added (use `add-page` playbook for that).
+
+### 4. Validate
+
+Run the full Chrysalis Gates pipeline:
+
+```bash
+# From repository root
+node .lorapok/scripts/brand-guard.mjs
+
+# From app/ directory
+cd app && npm run lint
+cd app && npm run build
+```
+
+---
+
+## Example Entry
+
+```ts
+{
+  id: 'brain-spark',
+  name: 'BrainSpark',
+  tagline: 'Idea Generator',
+  description: 'AI-powered brainstorming tool that transforms vague ideas into actionable project plans.',
+  icon: 'Lightbulb',
+  platforms: ['Web', 'CLI'],
+  status: 'beta',
+  url: 'https://lorapok.github.io',
+  github: 'https://github.com/Maijied/brain-spark',
+  color: 'var(--neon-green)',
+},
+```
+
+---
+
 ## Brand Rules
 
-- Descriptions: one sentence, active voice ("Monitors…", "Generates…").
-- Status must accurately reflect public availability.
-- Tags use kebab-case.
+| Rule | Requirement |
+|------|-------------|
+| Description | One sentence, active voice, no trailing period in tagline |
+| Status | Must accurately reflect current state: `active`, `beta`, or `archived` |
+| Tags | Use kebab-case for the `id` field |
+| Icon | Must be a valid Lucide React icon name in PascalCase |
+| URL | Must be a valid HTTPS URL |
+| Platforms | List actual deployment targets (e.g., `Web`, `CLI`, `npm`, `VS Code`) |
+
+---
+
+## Post-conditions
+
+After executing this playbook:
+
+- [ ] A new entry exists in `app/src/data/products.ts`
+- [ ] The entry satisfies the `Product` interface with no type errors
+- [ ] The product renders correctly on the Products page
+- [ ] Brand Guard passes with zero errors
+- [ ] ESLint passes with zero errors
+- [ ] Build completes successfully
